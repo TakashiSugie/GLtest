@@ -5,8 +5,83 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import numpy as np
-from callBack import keyboard, mouse, motion, cb_resize
-from callBack import Distance, Angle1, Angle2
+
+# from callBack import keyboard, mouse, motion, cb_resize
+# from callBack import Distance, Angle1, Angle2
+
+
+LeftButtonOn = False
+RightButtonOn = False
+Angle1 = 0
+Angle2 = 0
+Distance = 7.0
+
+
+def cb_resize(w, h):
+    # print("resize", w, h)
+    # Windowの左から100, 下から100, 幅w/2, 高さh/2をビューポートにする
+    glViewport(50, 150, int(w / 2), int(h / 2))
+    # glViewport()
+
+
+def mouse(button, state, x, y):
+    global LeftButtonOn, RightButtonOn
+    if button == GLUT_LEFT_BUTTON:
+        # print("left", state, button)
+        # if state == GLUT_UP:
+        if state == 1:
+            LeftButtonOn = False
+            # print("left up")
+        # elif state == GLUT_DOWN:
+        elif state == 0:
+            LeftButtonOn = True
+            # print("left down")
+
+    if button == GLUT_RIGHT_BUTTON:
+        # print("right")
+        if state == GLUT_UP:
+            RightButtonOn = False
+            # print("right up")
+        elif state == GLUT_DOWN:
+            RightButtonOn = True
+            # print("right down")
+    # print(x, y)
+
+
+def motion(x, y):
+    # print("motion:")
+    global RightButtonOn, LeftButtonOn, Angle1, Angle2, Distance
+    px, py = -1, -1
+    print(RightButtonOn, LeftButtonOn, Angle1, Angle2, Distance)
+
+    if LeftButtonOn == True and RightButtonOn == True:
+        Angle1 = 0
+        Angle2 = 0
+        gluLookAt(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+    elif LeftButtonOn == True:
+        if px >= 0 and py >= 0:
+            Angle1 += -(x - px) / 50
+            Angle2 += (y - py) / 50
+        px = x
+        py = y
+    elif RightButtonOn == True:
+        if px >= 0 and py >= 0:
+            Distance += float(y - py) / 20
+        px = x
+        py = y
+    else:
+        px = -1
+        py = -1
+    glutPostRedisplay()
+
+
+def keyboard(key, x, y):
+    if key == "\033":  # Escape
+        sys.exit()
+    elif key == "q":
+        sys.exit()
+    else:
+        print(key)
 
 
 img = cv2.imread("data/04_04.png")
@@ -57,12 +132,12 @@ def myDraw():
         1.0,
         0.0,
     )
-    print(Distance, Angle1, Angle2)
+    # print(Distance, Angle1, Angle2)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
     glPointSize(1)
     glBegin(GL_POINTS)
-    print(len(verts))
+    # print(len(verts))
     for vert in verts:
         glColor3d(vert[3], vert[4], vert[5])
         glVertex3f(vert[0], vert[1], vert[2])
