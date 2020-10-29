@@ -4,6 +4,7 @@ import cv2
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 import numpy as np
+from callBack import keyboard, mouse, motion, resize
 
 
 img = cv2.imread("data/04_04.png")
@@ -55,11 +56,22 @@ def myDraw():
     glutSwapBuffers()
 
 
-def setting():
+def setup():
     glutInit(sys.argv)
+    # RGBAモード、ダブルバッファリング有効、Zバッファ有効で初期化
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
-    glutInitWindowSize(320, 240)
-    glutCreateWindow("PyOpenGL 2")
+    glutInitWindowSize(640, 480)
+    glutCreateWindow("glut sample")
+    # Windowのサイズが変わった時に呼ばれる関数を登録
+    glutReshapeFunc(resize)
+    # 描画時に呼ばれる関数を登録
+    glutDisplayFunc(myDraw)
+    # マウスボタン押し上げ時に呼ばれる関数
+    glutMouseFunc(mouse)
+    # マウスドラッグ時に呼ばれる関数
+    glutMotionFunc(motion)
+    # キーボードが押された時に呼ばれる関数
+    glutKeyboardFunc(keyboard)
 
 
 def rendering():
@@ -68,6 +80,6 @@ def rendering():
 
 
 if __name__ == "__main__":
-    setting()
+    setup()
     verts = setVerts(img, depthImg)
     rendering()
