@@ -10,10 +10,11 @@ Angle2 = 0
 Distance = 7.0
 
 
-def resize(w, h):
+def cb_resize(w, h):
     print("resize", w, h)
     # Windowの左から100, 下から100, 幅w/2, 高さh/2をビューポートにする
     glViewport(50, 150, w / 2, h / 2)
+    glViewport()
 
 
 def mouse(button, state, x, y):
@@ -24,27 +25,11 @@ def mouse(button, state, x, y):
         elif state == GLUT_DOWN:
             LeftButtonOn = True
 
-    # if(button == GLUT_LEFT_BUTTON){
-    #     if(state == GLUT_UP){
-    #     LeftButtonOn = false;
-    #     }else if(state == GLUT_DOWN){
-    #     LeftButtonOn = true;
-    #     }
-    # }
-
     if button == GLUT_RIGHT_BUTTON:
         if state == GLUT_UP:
             RightButtonOn = False
         elif state == GLUT_DOWN:
             RightButtonOn = True
-
-    # if(button == GLUT_RIGHT_BUTTON){
-    #     if(state == GLUT_UP){
-    #     RightButtonOn = false;
-    #     }else if(state == GLUT_DOWN){
-    #     RightButtonOn = true;
-    #     }
-    # }
     print(x, y)
 
 

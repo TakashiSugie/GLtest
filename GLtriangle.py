@@ -1,10 +1,12 @@
 #!/usr/bin/python
-
+# 複数に分けたかったけど、多分きびしいかな。。。変更されない
 import cv2
 from OpenGL.GL import *
 from OpenGL.GLUT import *
+from OpenGL.GLU import *
 import numpy as np
-from callBack import keyboard, mouse, motion, resize
+from callBack import keyboard, mouse, motion, cb_resize
+from callBack import Distance, Angle1, Angle2
 
 
 img = cv2.imread("data/04_04.png")
@@ -43,6 +45,19 @@ def calcVert(x, y):
 def myDraw():
     global verts
     glClearColor(0.0, 0.0, 0.0, 0.0)
+
+    gluLookAt(
+        Distance * np.cos(Angle2) * np.sin(Angle1),
+        Distance * np.sin(Angle2),
+        Distance * np.cos(Angle2) * np.cos(Angle1),
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+    )
+    print(Distance, Angle1, Angle2)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
     glPointSize(1)
@@ -63,7 +78,7 @@ def setup():
     glutInitWindowSize(640, 480)
     glutCreateWindow("glut sample")
     # Windowのサイズが変わった時に呼ばれる関数を登録
-    glutReshapeFunc(resize)
+    glutReshapeFunc(cb_resize)
     # 描画時に呼ばれる関数を登録
     glutDisplayFunc(myDraw)
     # マウスボタン押し上げ時に呼ばれる関数
