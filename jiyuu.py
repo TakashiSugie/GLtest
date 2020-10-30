@@ -54,7 +54,6 @@ def motion(x, y):
         px = x
         py = y
     elif RightButtonOn == True:
-        # print("px reload", x, px)
         if px >= 0 and py >= 0:
             Distance += float(y - py) / 20
         px = x
@@ -127,6 +126,7 @@ def setVerts(img, depthImg):
             X, Y, Z = calcVert(x, y)
             vert = np.array([X, Y, Z, colors[0], colors[1], colors[2]])
             verts.append(vert)
+    #verts=np.array(verts)
     return verts
 
 
