@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# 複数に分けたかったけど、多分きびしいかな。。。変更されない
 import cv2
 from OpenGL.GL import *
 from OpenGL.GLUT import *
@@ -19,27 +18,24 @@ px, py = -1, -1
 
 
 def cb_resize(w, h):
-    # print("resize", w, h)
-    # Windowの左から100, 下から100, 幅w/2, 高さh/2をビューポートにする
-    glViewport(50, 150, int(w / 2), int(h / 2))
-    # glViewport()
+
+    glViewport(0, 0, w, h)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluPerspective(100.0, w / h, 1.0, 100.0)
+    glMatrixMode(GL_MODELVIEW)
+    # glViewport(50, 150, int(w / 2), int(h / 2))
 
 
 def mouse(button, state, x, y):
     global LeftButtonOn, RightButtonOn
     if button == GLUT_LEFT_BUTTON:
-        # print("left", state, button)
-        # if state == GLUT_UP:
         if state == 1:
             LeftButtonOn = False
-            # print("left up")
-        # elif state == GLUT_DOWN:
         elif state == 0:
             LeftButtonOn = True
-            # print("left down")
 
     if button == GLUT_RIGHT_BUTTON:
-        # print("right")
         if state == GLUT_UP:
             RightButtonOn = False
             # print("right up")
