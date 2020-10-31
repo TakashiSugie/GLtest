@@ -23,6 +23,7 @@ maxD = np.max(depthImg)
 minD = np.min(depthImg)
 ratio = 0.00001
 verts = []
+# 1031_
 
 
 def mouse(button, state, x, y):
@@ -109,6 +110,9 @@ def draw():
     for vert in verts:
         glColor3d(vert[3], vert[4], vert[5])
         glVertex3f(vert[0], vert[1], vert[2])
+    # for idx in range(verts.shape[0]):
+    #     glColor3d(verts[idx][3], verts[idx][4], verts[idx][5])
+    #     glVertex3f(verts[idx][0], verts[idx][1], verts[idx][2])
     glEnd()
     glFlush()
     glutSwapBuffers()
@@ -126,7 +130,7 @@ def setVerts(img, depthImg):
             X, Y, Z = calcVert(x, y)
             vert = np.array([X, Y, Z, colors[0], colors[1], colors[2]])
             verts.append(vert)
-    #verts=np.array(verts)
+    # verts=np.array(verts)
     return verts
 
 
