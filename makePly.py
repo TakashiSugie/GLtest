@@ -1,12 +1,13 @@
 #!env python
 
+# plyを作成するコード
+# makePly makePly Mを求める　統合　jiyuu.pyにしたい
+
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import numpy as np
 import cv2
-
-# ひとまずこいつをいい感じに回すことを考えたい
 
 LeftButtonOn = False
 RightButtonOn = False
@@ -62,7 +63,6 @@ def motion(x, y):
         px = -1
         py = -1
 
-    # print(LeftButtonOn, RightButtonOn, Angle1, Angle2, Distance, px, py, x, y)
     glutPostRedisplay()
 
 
@@ -82,7 +82,7 @@ def resize(w, h):
     glViewport(0, 0, w, h)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(30.0, w / h, 1, 1000.0)  # 視体積を設定することができる
+    gluPerspective(30.0, w / h, 1, 1000.0)
     glMatrixMode(GL_MODELVIEW)
 
 
@@ -105,13 +105,9 @@ def draw():
     )
     glPointSize(3)
     glBegin(GL_POINTS)
-    # print(len(verts))
     for vert in verts:
         glColor3d(vert[3], vert[4], vert[5])
         glVertex3f(vert[0], vert[1], vert[2])
-    # for idx in range(verts.shape[0]):
-    #     glColor3d(verts[idx][3], verts[idx][4], verts[idx][5])
-    #     glVertex3f(verts[idx][0], verts[idx][1], verts[idx][2])
     glEnd()
     glFlush()
     glutSwapBuffers()
@@ -129,7 +125,6 @@ def setVerts(img, depthImg):
             X, Y, Z = calcVert(x, y)
             vert = np.array([X, Y, Z, colors[0], colors[1], colors[2]])
             verts.append(vert)
-    # verts=np.array(verts)
     return verts
 
 
