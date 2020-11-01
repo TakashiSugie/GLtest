@@ -153,5 +153,6 @@ glutMotionFunc(motion)
 glClearColor(0.0, 0.0, 1.0, 0.0)
 glEnable(GL_DEPTH_TEST)
 verts = setVerts(img, depthImg)
+print(len(verts))
 
 glutMainLoop()

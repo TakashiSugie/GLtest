@@ -15,9 +15,9 @@ import scipy.io as sio
 
 def matLoad():
     mat = sio.loadmat("../../dataset/%s.mat" % LFName)
-    depth_gt = mat["depth"]
-    print(depth_gt.shape)
-    return depth_gt[0][0]
+    disp_gt = mat["depth"]
+    print(disp_gt.shape)
+    return disp_gt[0][0]
 
 
 basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
@@ -41,25 +41,15 @@ def setVerts(img, depthImg, paraDict):
     for x in range(img.shape[1]):
         for y in range(img.shape[0]):
             colors = [
-                float(img[y][x][0] / 255.0),
-                float(img[y][x][1] / 255.0),
-                float(img[y][x][2] / 255.0),
+                float(img[x][y][0] / 255.0),
+                float(img[x][y][1] / 255.0),
+                float(img[x][y][2] / 255.0),
             ]
-            # X, Y, Z = calcVert(x, y)
             X, Y, Z = pix2m_disp(x, y, paraDict)
 
             vert = np.array([X, Y, Z, colors[0], colors[1], colors[2]])
             verts.append(vert)
     return verts
-
-
-def pix2m_depth(x, y):
-    f_mm = 0.01
-    B_m = 0.001
-    Z = float(depthImg[x][y])
-    X = x * Z / f_pix
-    Y = y * Z / f_pix
-    return X, Y, Z
 
 
 def pix2m_disp(x, y, paraDict):
@@ -77,14 +67,14 @@ def pix2m_disp(x, y, paraDict):
     return X, Y, Z
 
 
-def calcVert(x, y):
-    X = (2.0 * float(x) / float(width)) - 1
-    Y = 1 - (2.0 * float(y) / float(height))
-    Z = ratio * float(maxD - minD) * float(depthImg[y][x])
-    return X, Y, Z
-
-
 if __name__ == "__main__":
-
     paraDict = readCg(cgPath)
     verts = setVerts(img, dispImg, paraDict)
+    verts_np = np.array(verts)
+    # print(verts)
+    # print(verts_np.shape)
+    verts_reshape = np.reshape(verts_np, (512, 512, 6))
+    # print(verts_reshape.shape)
+    np.save("verts_reshape", verts_reshape)
+    # ここで出てくるplyはワールド座標、x,y,zともに単位はmm
+    # OpenGLで描画するときはこれを正規化して、見やすくする
