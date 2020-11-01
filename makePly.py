@@ -2,119 +2,42 @@
 
 # plyを作成するコード
 # makePly makePly Mを求める　統合　jiyuu.pyにしたい
-
+# xは全体を
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import numpy as np
 import cv2
+from readFile import readCg
+import os
+import scipy.io as sio
 
-LeftButtonOn = False
-RightButtonOn = False
-Angle1 = 0
-Angle2 = 0
-Distance = 7.0
-px, py = -1, -1
 
-img = cv2.imread("data/table/table.png")
-depthImg = cv2.imread("data/table/tableD.png", 0)
+def matLoad():
+    mat = sio.loadmat("../../dataset/%s.mat" % LFName)
+    depth_gt = mat["depth"]
+    print(depth_gt.shape)
+    return depth_gt[0][0]
+
+
+basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
+LFName = "tower"
+cfgName = "parameters.cfg"
+imgName = "input_Cam000.png"
+cgPath = os.path.join(basePath, LFName, cfgName)
+imgPath = os.path.join(basePath, LFName, imgName)
+img = cv2.imread(imgPath)
+dispImg = matLoad()
+
+
 width = img.shape[1]
 height = img.shape[0]
-maxD = np.max(depthImg)
-minD = np.min(depthImg)
-ratio = 0.00001
 verts = []
 
 
-def mouse(button, state, x, y):
-    global LeftButtonOn, RightButtonOn
-    if button == GLUT_LEFT_BUTTON:
-        if state == 1:
-            LeftButtonOn = False
-        elif state == 0:
-            LeftButtonOn = True
-
-    if button == GLUT_RIGHT_BUTTON:
-        if state == GLUT_UP:
-            RightButtonOn = False
-        elif state == GLUT_DOWN:
-            RightButtonOn = True
-
-
-def motion(x, y):
-    global RightButtonOn, LeftButtonOn, Angle1, Angle2, Distance, px, py
-    if LeftButtonOn == True and RightButtonOn == True:
-        Angle1 = 0
-        Angle2 = 0
-        Distance = 7.0
-        gluLookAt(0, 0, 7.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0)
-    elif LeftButtonOn == True:
-        if px >= 0 and py >= 0:
-            Angle1 += float(-(x - px) / 50)
-            Angle2 += float((y - py) / 50)
-        px = x
-        py = y
-    elif RightButtonOn == True:
-        if px >= 0 and py >= 0:
-            Distance += float(y - py) / 20
-        px = x
-        py = y
-    else:
-        px = -1
-        py = -1
-
-    glutPostRedisplay()
-
-
-def keyboard(key, x, y):
-    global Angle2
-    if key.decode() == "\033":  # Escape
-        sys.exit()
-    elif key.decode() == "q":
-        sys.exit()
-    elif key.decode() == "j":
-        Angle2 += 1.0
-    else:
-        print(key.decode())
-
-
-def resize(w, h):
-    glViewport(0, 0, w, h)
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
-    gluPerspective(30.0, w / h, 1, 1000.0)
-    glMatrixMode(GL_MODELVIEW)
-
-
-def draw():
-    global Angle1, Angle2, verts
-
-    glClearColor(0.0, 0.0, 1.0, 0.0)
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    glLoadIdentity()
-    gluLookAt(
-        Distance * np.cos(Angle2) * np.sin(Angle1),
-        Distance * np.sin(Angle2),
-        Distance * np.cos(Angle2) * np.cos(Angle1),
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0,
-        0.0,
-    )
-    glPointSize(3)
-    glBegin(GL_POINTS)
-    for vert in verts:
-        glColor3d(vert[3], vert[4], vert[5])
-        glVertex3f(vert[0], vert[1], vert[2])
-    glEnd()
-    glFlush()
-    glutSwapBuffers()
-
-
-def setVerts(img, depthImg):
+def setVerts(img, depthImg, paraDict):
     global verts
+    print(img.shape, depthImg.shape)
     for x in range(img.shape[1]):
         for y in range(img.shape[0]):
             colors = [
@@ -122,10 +45,36 @@ def setVerts(img, depthImg):
                 float(img[y][x][1] / 255.0),
                 float(img[y][x][2] / 255.0),
             ]
-            X, Y, Z = calcVert(x, y)
+            # X, Y, Z = calcVert(x, y)
+            X, Y, Z = pix2m_disp(x, y, paraDict)
+
             vert = np.array([X, Y, Z, colors[0], colors[1], colors[2]])
             verts.append(vert)
     return verts
+
+
+def pix2m_depth(x, y):
+    f_mm = 0.01
+    B_m = 0.001
+    Z = float(depthImg[x][y])
+    X = x * Z / f_pix
+    Y = y * Z / f_pix
+    return X, Y, Z
+
+
+def pix2m_disp(x, y, paraDict):
+    f_mm = paraDict["focal_length_mm"]
+    s_mm = paraDict["sensor_size_mm"]
+    b_mm = paraDict["baseline_mm"]
+    f_pix = (f_mm * dispImg.shape[1]) / s_mm
+    if dispImg[x][y]:
+        Z = b_mm * f_pix / float(dispImg[x][y])
+    else:
+        print("zero!!")
+        Z = 0
+    X = x * Z / f_pix
+    Y = y * Z / f_pix
+    return X, Y, Z
 
 
 def calcVert(x, y):
@@ -135,18 +84,7 @@ def calcVert(x, y):
     return X, Y, Z
 
 
-glutInit(sys.argv)
-glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
-glutInitWindowSize(320, 320)
-glutCreateWindow("PyOpenGL 11")
-glutDisplayFunc(draw)
-glutReshapeFunc(resize)
-glutKeyboardFunc(keyboard)
-glutMouseFunc(mouse)
-glutMotionFunc(motion)
+if __name__ == "__main__":
 
-glClearColor(0.0, 0.0, 1.0, 0.0)
-glEnable(GL_DEPTH_TEST)
-verts = setVerts(img, depthImg)
-
-glutMainLoop()
+    paraDict = readCg(cgPath)
+    verts = setVerts(img, dispImg, paraDict)

@@ -23,9 +23,3 @@ if __name__ == "__main__":
                 "./depth/tower/depth_%d_%d.png" % (i * 4, i * 4),
                 min0_max1 * 255,
             )
-    else:
-        Dmax = np.max(depth_gt[0][0])
-        Dmin = np.min(depth_gt[0][0])
-
-        print(Dmax, Dmin)
-        # depthって言うけどこれ視差っぽくない？
