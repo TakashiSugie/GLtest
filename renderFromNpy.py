@@ -5,7 +5,8 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import numpy as np
 import cv2
-from normalization import vertsNormalization
+from normalization import vertsNormalization, checkMaxMin
+from fromImg import setVerts
 
 LeftButtonOn = False
 RightButtonOn = False
@@ -95,39 +96,12 @@ def draw():
     )
     glPointSize(3)
     glBegin(GL_POINTS)
-    # print(len(verts))
     for vert in verts:
         glColor3d(vert[3], vert[4], vert[5])
         glVertex3f(vert[0], vert[1], vert[2])
-    # for idx in range(verts.shape[0]):
-    #     glColor3d(verts[idx][3], verts[idx][4], verts[idx][5])
-    #     glVertex3f(verts[idx][0], verts[idx][1], verts[idx][2])
     glEnd()
     glFlush()
     glutSwapBuffers()
-
-
-def setVerts(img, depthImg):
-    global verts
-    for x in range(img.shape[1]):
-        for y in range(img.shape[0]):
-            colors = [
-                float(img[y][x][0] / 255.0),
-                float(img[y][x][1] / 255.0),
-                float(img[y][x][2] / 255.0),
-            ]
-            X, Y, Z = calcVert(x, y)
-            vert = np.array([X, Y, Z, colors[0], colors[1], colors[2]])
-            verts.append(vert)
-    # verts=np.array(verts)
-    return verts
-
-
-def calcVert(x, y):
-    X = (2.0 * float(x) / float(width)) - 1
-    Y = 1 - (2.0 * float(y) / float(height))
-    Z = ratio * float(maxD - minD) * float(depthImg[y][x])
-    return X, Y, Z
 
 
 glutInit(sys.argv)
@@ -142,20 +116,10 @@ glutMotionFunc(motion)
 
 glClearColor(0.0, 0.0, 1.0, 0.0)
 glEnable(GL_DEPTH_TEST)
-# verts = setVerts(img, depthImg)
 preverts = np.load("verts_reshape.npy")
-
-# verts = list(vertsNormalization(preverts))
-verts_noreshape = vertsNormalization(preverts)
-verts = list(
-    np.reshape(
-        verts_noreshape, (verts_noreshape.shape[1] * verts_noreshape.shape[0], 6)
-    )
-)
-print(len(verts))
-# 512,512,6 npy
-# normalization xyz で一括
-# 512*512,6 にreshape
+verts = vertsNormalization(preverts)
+# verts = setVerts()
+checkMaxMin(verts)
 # list型に変換
 
 
