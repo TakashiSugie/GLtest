@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "/home/takashi/anaconda3/envs/gl/bin/python",
+    "python.formatting.provider": "black"
+}
