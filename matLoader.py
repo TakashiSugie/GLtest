@@ -4,6 +4,25 @@ import cv2
 from sklearn import preprocessing
 import numpy as np
 
+def makeDepthImg():
+    file_name = "tower"
+
+    mat = sio.loadmat(
+        "tower/%s.mat" % file_name
+    )
+    depth_gt = mat["depth"]
+    mm = preprocessing.MinMaxScaler()
+    min0_max1 = mm.fit_transform(depth_gt[0][0])
+    cv2.imwrite(
+        "./tower/depth_%d_%d.png" % (0,0),
+        min0_max1 * 255,
+    )
+    print("depth", min0_max1.shape)
+    return min0_max1
+
+
+
+
 saveImgF = False
 if __name__ == "__main__":
     file_name = "tower"

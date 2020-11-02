@@ -29,20 +29,6 @@ def XYZnormalization(array):
     return dst_3d
 
 
-def XYZnormalization2(array):
-    max, min = [], []
-    dst_3d = np.zeros(array.shape)
-    for i in range(3):
-        max.append(np.max(array[:, :, i]))
-        min.append(np.min(array[:, :, i]))
-
-        for x in range(array.shape[1]):
-            for y in range(array.shape[0]):
-                dst_3d[x][y][i] = float(array[x][y][i] - min[i]) / float(
-                    max[i] - min[i]
-                )
-    return dst_3d
-
 
 def vertsNormalization(verts):
     xyz = verts[:, :, :3]
@@ -58,7 +44,8 @@ def vertsNormalization(verts):
 
 
 def checkMaxMin(verts_list):
-    max, min, view = [], [], []
+    max, min = [], []
+    view={}
     # print(verts.ndim)
     verts = np.array(verts_list)
     if verts.ndim == 2:
@@ -70,12 +57,13 @@ def checkMaxMin(verts_list):
         for i in range(6):
             max.append(np.max(verts[:, :, i]))
             min.append(np.min(verts[:, :, i]))
-    # print(max)
-    # print(min)
-    view.append(max)
-    view.append(min)
-
-    print(np.array(view))
+    # view.append(max)
+    # view.append(min)
+    view["max"]=max
+    view["min"]=min
+    for key,value in view.items():
+        print(key,value)
+    # print(view)
 
 
 if __name__ == "__main__":

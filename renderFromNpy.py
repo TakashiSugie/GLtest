@@ -6,7 +6,7 @@ from OpenGL.GLUT import *
 import numpy as np
 import cv2
 from normalization import vertsNormalization, checkMaxMin
-from fromImg import setVerts
+from fromImg import setVerts,setVerts2
 
 LeftButtonOn = False
 RightButtonOn = False
@@ -118,7 +118,7 @@ glClearColor(0.0, 0.0, 1.0, 0.0)
 glEnable(GL_DEPTH_TEST)
 preverts = np.load("verts_reshape.npy")
 # verts = vertsNormalization(preverts)
-verts = setVerts()
+verts = setVerts2()
 checkMaxMin(verts)
 print("len_verts:", len(verts))
 print(np.array(verts))

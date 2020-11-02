@@ -14,13 +14,15 @@ import scipy.io as sio
 
 
 def matLoad():
-    mat = sio.loadmat("../../dataset/%s.mat" % LFName)
+    # mat = sio.loadmat("../../dataset/%s.mat" % LFName)
+    mat = sio.loadmat("./tower/%s.mat" % LFName)
     disp_gt = mat["depth"]
     print(disp_gt.shape)
     return disp_gt[0][0]
 
 
-basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
+#basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
+basePath = "."
 LFName = "tower"
 cfgName = "parameters.cfg"
 imgName = "input_Cam000.png"
@@ -28,6 +30,7 @@ cgPath = os.path.join(basePath, LFName, cfgName)
 imgPath = os.path.join(basePath, LFName, imgName)
 img = cv2.imread(imgPath)
 dispImg = matLoad()
+dMin=np.min(dispImg)
 
 
 width = img.shape[1]
@@ -58,7 +61,9 @@ def pix2m_disp(x, y, paraDict):
     b_mm = paraDict["baseline_mm"]
     f_pix = (f_mm * dispImg.shape[1]) / s_mm
     if dispImg[x][y]:
-        Z = b_mm * f_pix / float(dispImg[x][y])
+        #Z = b_mm * f_pix / float(dispImg[x][y])
+        #Z = float(b_mm * f_mm )/float( (dispImg[x][y] * f_mm * s_mm + b_mm))
+        Z=float(dispImg[x][y])+dMin
     else:
         print("zero!!")
         Z = 0
@@ -71,8 +76,6 @@ if __name__ == "__main__":
     paraDict = readCg(cgPath)
     verts = setVerts(img, dispImg, paraDict)
     verts_np = np.array(verts)
-    # print(verts)
-    # print(verts_np.shape)
     verts_reshape = np.reshape(verts_np, (512, 512, 6))
     # print(verts_reshape.shape)
     np.save("verts_reshape", verts_reshape)
