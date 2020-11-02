@@ -5,8 +5,8 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import numpy as np
 import cv2
-from normalization import vertsNormalization, checkMaxMin
-from setVerts import setVerts
+from evaluation import  checkMaxMin
+from setVerts import setVertsFromImg,setVertsFromNpy
 
 LeftButtonOn = False
 RightButtonOn = False
@@ -69,7 +69,7 @@ def keyboard(key, x, y):
         print(key.decode())
 
 
-def resize(w, h):
+def resize_cb(w, h):
     glViewport(0, 0, w, h)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
@@ -109,7 +109,7 @@ glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
 glutInitWindowSize(320, 320)
 glutCreateWindow("PyOpenGL 11")
 glutDisplayFunc(draw)
-glutReshapeFunc(resize)
+glutReshapeFunc(resize_cb)
 glutKeyboardFunc(keyboard)
 glutMouseFunc(mouse)
 glutMotionFunc(motion)
@@ -118,7 +118,8 @@ glClearColor(0.0, 0.0, 1.0, 0.0)
 glEnable(GL_DEPTH_TEST)
 #preverts = np.load("verts_reshape.npy")
 # verts = vertsNormalization(preverts)
-verts_np3d = setVerts()
+verts_np3d = setVertsFromImg()
+#verts_np3d = setVertsFromNpy()
 verts=list(np.reshape(verts_np3d,(verts_np3d.shape[0]*verts_np3d.shape[1],6)))
 checkMaxMin(verts)
 #print("len_verts:", len(verts))
