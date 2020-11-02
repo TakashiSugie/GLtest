@@ -34,3 +34,34 @@ def calcVert(x, y):
     Y = 1 - (2.0 * float(y) / float(height))
     Z = ratio * float(maxD - minD) * float(depthImg[y][x])
     return X, Y, Z
+
+
+def setVerts2():
+    global verts, vert_point
+    for x in range(img.shape[1]):
+        for y in range(img.shape[0]):
+            colors = [
+                float(img[y][x][0] / 255.0),
+                float(img[y][x][1] / 255.0),
+                float(img[y][x][2] / 255.0),
+            ]
+            # X, Y, Z = calcVert(x, y)
+            vert_points
+            vert = np.array([X, Y, Z, colors[2], colors[1], colors[0]])
+            verts.append(vert)
+    return verts
+
+
+def XYZnormalization2(array):
+    max, min = [], []
+    dst_3d = np.zeros(array.shape)
+    for i in range(3):
+        max.append(np.max(array[:, :, i]))
+        min.append(np.min(array[:, :, i]))
+
+        for x in range(array.shape[1]):
+            for y in range(array.shape[0]):
+                dst_3d[x][y][i] = (
+                    2 * float(array[x][y][i] - min[i]) / float(max[i] - min[i]) - 1
+                )
+    return dst_3d

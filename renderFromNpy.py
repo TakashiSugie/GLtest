@@ -117,9 +117,12 @@ glutMotionFunc(motion)
 glClearColor(0.0, 0.0, 1.0, 0.0)
 glEnable(GL_DEPTH_TEST)
 preverts = np.load("verts_reshape.npy")
-verts = vertsNormalization(preverts)
-# verts = setVerts()
+# verts = vertsNormalization(preverts)
+verts = setVerts()
 checkMaxMin(verts)
+print("len_verts:", len(verts))
+print(np.array(verts))
+
 # list型に変換
 
 

@@ -46,9 +46,12 @@ def XYZnormalization2(array):
 
 def vertsNormalization(verts):
     xyz = verts[:, :, :3]
-    # verts_c=verts[:,:,5]
+    print(verts[:, :, 5:6].shape)
+    verts_c = np.concatenate(
+        [verts[:, :, 5:6], verts[:, :, 4:5], verts[:, :, 3:4]], axis=2
+    )
     xyzNormed = XYZnormalization(xyz)
-    vertsNormed = np.concatenate((xyzNormed, verts[:, :, 3:6]), axis=2)
+    vertsNormed = np.concatenate((xyzNormed, verts_c), axis=2)
     verts_Normed_2d = np.reshape(vertsNormed, (verts.shape[0] * verts.shape[1], 6))
 
     return list(verts_Normed_2d)
