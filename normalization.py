@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 
 checkC_F = True
-#dafj
+
 
 def normalization(array):
     max = np.max(array)
