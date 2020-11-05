@@ -77,9 +77,7 @@ def readPly(mesh_fi):
             break
     contents = ply_fi.readlines()
     vertex_infos = contents[:num_vertex]
-    verts = []
-    colors = []
-    faces = []
+    print(num_vertex)
     for v_info in vertex_infos:
         str_info = [float(v) for v in v_info.split("\n")[0].split(" ")]
         if len(str_info) == 6:
@@ -99,9 +97,12 @@ def readPly(mesh_fi):
     return np.reshape(np.array(vertsList), (img.shape[0], img.shape[1], 6))
 
 
-def setVertsFromPly():
+def setVertsFromPly(mesh_fi):
     global verts
-    npyVerts = readPly("./mesh/new_%s_%s.ply" % (imgName1, imgName2))
+    # npyVerts = readPly("./mesh/new_%s_%s.ply" % (imgName1, imgName2))
+    # npyVerts = readPly("./mesh/04_04.ply")
+    npyVerts = readPly(mesh_fi)
+
     print(npyVerts.shape)
     colors = npyVerts[:, :, 3:6]
     points = npyVerts[:, :, 0:3]

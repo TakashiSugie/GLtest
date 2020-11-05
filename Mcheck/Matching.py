@@ -6,16 +6,11 @@ import os
 from copy import deepcopy
 import sys
 
+from variable import imgName1, imgName2, imgPath1, imgPath2, saveName
+
 # https: // code-graffiti.com/opencv-feature-matching-in-python/
 # https://python-debut.blogspot.com/2020/02/csv.html
 df = pd.DataFrame(columns=["x_query", "y_query", "x_train", "y_train", "Distance"])
-
-LFName = "tower"
-imgName1 = "input_Cam000"
-imgName2 = "input_Cam080"
-baseName = "/home/takashi/Desktop/dataset/from_iwatsuki/lf_dataset/additional"
-img1Path = os.path.join(baseName, LFName, imgName1 + ".png")
-img2Path = os.path.join(baseName, LFName, imgName2 + ".png")
 
 
 def display(img, cmap="gray"):
@@ -45,7 +40,7 @@ def flannMatching(hacker, items):
     saveCsv(saveMatches, kp1, kp2)
 
     flann_matches = cv2.drawMatchesKnn(hacker, kp1, items, kp2, good, None, flags=0)
-    cv2.imwrite("./FPImg/" + imgName1 + "_" + imgName2 + ".png", flann_matches)
+    cv2.imwrite("./FPImg/" + saveName + ".png", flann_matches)
 
 
 def saveCsv(matches, kp_train, kp_query):
@@ -86,8 +81,8 @@ def longerResize(img, longerSideLen):
 
 
 def main():
-    hacker = cv2.imread(img1Path, 1)
-    items = cv2.imread(img2Path, 1)
+    hacker = cv2.imread(imgPath1, 1)
+    items = cv2.imread(imgPath2, 1)
     longer = max(hacker.shape[0], hacker.shape[1])
     if longer > 640:
         hacker = longerResize(hacker, 640)

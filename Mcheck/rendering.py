@@ -8,6 +8,7 @@ import cv2
 
 # from evaluation import checkMaxMin
 from setVerts import setVertsFromNpy, setVertsFromPly
+from variable import saveName
 
 LeftButtonOn = False
 RightButtonOn = False
@@ -15,6 +16,8 @@ Angle1 = 0
 Angle2 = 0
 Distance = 7.0
 px, py = -1, -1
+
+mesh_fi = "./mesh/" + saveName + ".ply"
 
 
 def mouse(button, state, x, y):
@@ -118,7 +121,7 @@ glutMotionFunc(motion)
 glClearColor(0.0, 0.0, 1.0, 0.0)
 glEnable(GL_DEPTH_TEST)
 # verts_np3d = setVertsFromNpy()
-verts_np3d = setVertsFromPly()
+verts_np3d = setVertsFromPly(mesh_fi)
 # np.savetxt(
 #     "fromImg.txt",
 #     np.reshape(verts_np3d, (verts_np3d.shape[0] * verts_np3d.shape[1], 6)),

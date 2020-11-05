@@ -7,79 +7,27 @@ from OpenGL.GLUT import *
 import numpy as np
 import cv2
 
-# from ..libs.loader import readCg, matLoad
-
-# from readFile import readCg
 import os
 import scipy.io as sio
 import re
+from variable import (
+    paraDict,
+    imgName1,
+    imgName2,
+    img1,
+    img2,
+    dispImg1,
+    dispImg2,
+)
+from libs import pix2m_disp
 
 
-def readCg(cgPath):
-    patternList = ["focal_length_mm", "sensor_size_mm", "baseline_mm"]
-    paraDict = {}
-    with open(cgPath) as f:
-        s = f.read()
-        sLines = s.split("\n")
-        for sLine in sLines:
-            for pattern in patternList:
-                if re.match(pattern, sLine):
-                    sList = sLine.split()
-                    paraDict[pattern] = float(sList[2])
-    print(paraDict)
-    return paraDict
-
-
-def matLoad(u, v):
-    mat = sio.loadmat(
-        "/home/takashi/Desktop/dataset/from_iwatsuki/mat_file/additional_disp_mat/%s.mat"
-        % LFName
-    )
-    disp_gt = mat["depth"]
-    return disp_gt[u][v]
-
-
-# basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
-u, v = 8, 8  # 0~8(uが→方向　vが下方向)
-camNum = u * 9 + v
-basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
-LFName = "antinous"
-cfgName = "parameters.cfg"
-imgName = "input_Cam{:03}".format(camNum)
-cgPath = os.path.join(basePath, LFName, cfgName)
-imgPath = os.path.join(basePath, LFName, imgName + ".png")
-img = cv2.imread(imgPath)
-dispImg = matLoad(u, v)
-dMin = np.min(dispImg)
-
-
-width = img.shape[1]
-height = img.shape[0]
-verts = []
-
-paraDict = readCg(cgPath)
-f_mm = paraDict["focal_length_mm"]
-s_mm = paraDict["sensor_size_mm"]
-b_mm = paraDict["baseline_mm"]
-longerSide = max(dispImg.shape[0], dispImg.shape[1])
-beta = b_mm * f_mm * longerSide
-f_pix = (f_mm * longerSide) / s_mm
-
-
-def pix2m_disp(x, y):
-    if dispImg[x][y]:
-        Z = float(beta * f_mm) / float((dispImg[x][y] * f_mm * s_mm + beta))
+def setVerts(verts, imgIdx):
+    # global verts
+    if imgIdx == 1:
+        img = img1
     else:
-        print("zero!!")
-        Z = 0
-    X = float(x) * Z / f_pix
-    Y = float(y) * Z / f_pix
-    return X, Y, Z
-
-
-def setVerts(img, depthImg, paraDict):
-    global verts
-    print(img.shape, depthImg.shape)
+        img = img2
     for x in range(img.shape[1]):
         for y in range(img.shape[0]):
             colors = [
@@ -87,18 +35,27 @@ def setVerts(img, depthImg, paraDict):
                 float(img[x][y][1] / 255.0),
                 float(img[x][y][0] / 255.0),
             ]
-            X, Y, Z = pix2m_disp(x, y)
+            X, Y, Z = pix2m_disp(x, y, imgIdx)
 
             vert = np.array([X, Y, Z, colors[0], colors[1], colors[2]])
             verts.append(vert)
-    # print(verts)
     return verts
 
 
 if __name__ == "__main__":
-    verts = setVerts(img, dispImg, paraDict)
-    verts_np = np.array(verts)
-    verts_reshape = np.reshape(verts_np, (512, 512, 6))
-    np.save("./npy/%s" % imgName, verts_reshape)
+    # global verts
+    verts = []
+    verts1 = setVerts(verts, imgIdx=1)
+    verts_np1 = np.array(verts1)
+    verts_reshape1 = np.reshape(verts_np1, (512, 512, 6))
+    np.save("./npy/%s" % imgName1, verts_reshape1)
+    del verts
+    # print(leverts)
+    verts = []
+    verts2 = setVerts(verts, imgIdx=2)
+    verts_np2 = np.array(verts2)
+    verts_reshape2 = np.reshape(verts_np2, (512, 512, 6))
+    np.save("./npy/%s" % imgName2, verts_reshape2)
     # ここで出てくるplyはワールド座標、x,y,zともに単位はmm
     # OpenGLで描画するときはこれを正規化して、見やすくする
+    del verts

@@ -2,17 +2,7 @@
 
 import numpy as np
 import os
-
-LFName = "tower"
-imgName1 = "input_Cam000"
-imgName2 = "input_Cam080"
-baseName = "/home/takashi/Desktop/dataset/from_iwatsuki/lf_dataset/additional"
-img1Path = os.path.join(baseName, LFName, imgName1 + ".png")
-img2Path = os.path.join(baseName, LFName, imgName2 + ".png")
-
-
-verts_np = np.load("./npy/%s.npy" % imgName1)
-verts_flat = np.reshape(verts_np, (verts_np.shape[0] * verts_np.shape[1], 6))
+from variable import imgName1, imgName2
 
 
 def getElement(line):
@@ -27,8 +17,9 @@ def getElement(line):
     )
 
 
-def createPlyData():
-    pathPly = "./mesh/%s.ply" % imgName1
+def createPlyData(imgName, verts_np):
+    pathPly = "./mesh/%s.ply" % imgName
+    verts_flat = np.reshape(verts_np, (verts_np.shape[0] * verts_np.shape[1], 6))
     vertsList = list(verts_flat)
     with open(pathPly, mode="w") as ply_fi:
         ply_fi.write("ply\n" + "format ascii 1.0\n")
@@ -64,5 +55,8 @@ def createPlyData():
 
 
 if __name__ == "__main__":
-    createPlyData()
-    # writeFile()
+    verts_np1 = np.load("./npy/%s.npy" % imgName1)
+    verts_np2 = np.load("./npy/%s.npy" % imgName2)
+
+    createPlyData(imgName1, verts_np1)
+    createPlyData(imgName2, verts_np2)

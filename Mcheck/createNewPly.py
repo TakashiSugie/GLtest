@@ -4,20 +4,12 @@ import os
 import sys
 import glob
 
-camNum1 = 0
-camNum2 = 80
-basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
-LFName = "tower"
-cfgName = "parameters.cfg"
-imgName1 = "input_Cam{:03}".format(camNum1)
-imgName2 = "input_Cam{:03}".format(camNum2)
-cgPath = os.path.join(basePath, LFName, cfgName)
-imgPath1 = os.path.join(basePath, LFName, imgName1 + ".png")
-imgPath2 = os.path.join(basePath, LFName, imgName2 + ".png")
+from variable import imgName1, imgName2, saveName
 
 
 def write_ply(v_line, f_line, Height, Width, hFov, vFov, num_vertex, num_face):
-    ply_name = "./mesh/new_" + imgName1 + "_" + imgName2 + ".ply"
+    # ply_name = "./mesh/new_" + imgName1 + "_" + imgName2 + ".ply"
+    ply_name = "./mesh/" + saveName + ".ply"
     print("Writing mesh file %s ..." % ply_name)
     with open(ply_name, "w") as ply_fi:
         ply_fi.write("ply\n" + "format ascii 1.0\n")
@@ -84,7 +76,7 @@ def main():
         mesh_fi
     )
     v_list = []
-    npyPath = "./M_" + imgName1 + "_" + imgName2 + ".npy"
+    npyPath = "./M/" + saveName + ".npy"
     M = np.load(npyPath)
     # M = np.array(([[1, 0, 0, 0], [0, 2, 0, 0], [0, 0, 1, 0]]))
     for v_info in vertex_infos:

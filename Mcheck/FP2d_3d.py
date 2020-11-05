@@ -3,52 +3,8 @@ import sys
 import os
 import scipy.io as sio
 import re
-
-
-def readCg(cgPath):
-    patternList = ["focal_length_mm", "sensor_size_mm", "baseline_mm"]
-    paraDict = {}
-    with open(cgPath) as f:
-        s = f.read()
-        sLines = s.split("\n")
-        for sLine in sLines:
-            for pattern in patternList:
-                if re.match(pattern, sLine):
-                    sList = sLine.split()
-                    paraDict[pattern] = float(sList[2])
-    print(paraDict)
-    return paraDict
-
-
-def matLoad(u, v, LFName):
-    mat = sio.loadmat(
-        "/home/takashi/Desktop/dataset/from_iwatsuki/mat_file/additional_disp_mat/%s.mat"
-        % LFName
-    )
-    disp_gt = mat["depth"]
-    return disp_gt[u][v]
-
-
-sys.path.append("/home/takashi/Desktop/libs")
-# from libs import loader
-# from loader import readCg, matLoad
-
-camNum = 80
-basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
-LFName = "tower"
-cfgName = "parameters.cfg"
-imgName1 = "input_Cam{:03}".format(camNum)
-cgPath = os.path.join(basePath, LFName, cfgName)
-imgPath = os.path.join(basePath, LFName, imgName1 + ".png")
-dispImg = matLoad(0, 0, LFName)
-
-paraDict = readCg(cgPath)
-f_mm = paraDict["focal_length_mm"]
-s_mm = paraDict["sensor_size_mm"]
-b_mm = paraDict["baseline_mm"]
-longerSide = max(dispImg.shape[0], dispImg.shape[1])
-beta = b_mm * f_mm * longerSide
-f_pix = (f_mm * longerSide) / s_mm
+from libs import readCg, matLoad, pix2m_disp
+from variable import imgName1, imgName2
 
 
 def readCVMatching(npyPath):
@@ -61,26 +17,19 @@ def readCVMatching(npyPath):
     return featurePointList
 
 
-def FP2d_3d(FP_2d):
+def FP2d_3d(imgIdx, FP_2d):
     FP_3d = []
     for FP in FP_2d:
-        FP_3d.append(pix2m_disp(FP[0], FP[1]))
+        FP_3d.append(pix2m_disp(FP[0], FP[1], imgIdx))
     return FP_3d
 
 
-def pix2m_disp(x, y):
-    if dispImg[x][y]:
-        Z = float(beta * f_mm) / float((dispImg[x][y] * f_mm * s_mm + beta))
-    else:
-        print("zero!!")
-        Z = 0
-    X = float(x) * Z / f_pix
-    Y = float(y) * Z / f_pix
-    return [X, Y, Z]
-
-
 if __name__ == "__main__":
-    FP_2d = readCVMatching("./FP_2d/FP_" + imgName1 + ".npy")
-    FP_3d = FP2d_3d(FP_2d)
-    np.save("./FP_3d/" + imgName1, FP_3d)
+    FP_2d_1 = readCVMatching("./FP_2d/FP_" + imgName1 + ".npy")
+    FP_3d_1 = FP2d_3d(1, FP_2d_1)
+    np.save("./FP_3d/" + imgName1, FP_3d_1)
+
+    FP_2d_2 = readCVMatching("./FP_2d/FP_" + imgName2 + ".npy")
+    FP_3d_2 = FP2d_3d(2, FP_2d_2)
+    np.save("./FP_3d/" + imgName2, FP_3d_2)
     # print(FP_3d)
