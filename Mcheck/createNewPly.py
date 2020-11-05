@@ -86,6 +86,7 @@ def main():
         else:
             vx, vy, vz, r, g, b, hi = str_info
         oldV = np.array((vx, vy, vz, 1))
+        # NewV = np.dot(M, oldV)
         NewV = np.dot(M, oldV)
         NewVx, NewVy, NewVz = NewV
         # print(NewV)

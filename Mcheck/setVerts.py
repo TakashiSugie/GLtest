@@ -120,6 +120,7 @@ def pointsNormal(points_np3d):
 
 def mmNormal(array):
     max, min = [], []
+    scale = 0.5
     dst_3d = np.zeros(array.shape)
     for i in range(3):
         max.append(np.max(array[:, :, i]))
@@ -127,7 +128,8 @@ def mmNormal(array):
         for x in range(array.shape[1]):
             for y in range(array.shape[0]):
                 dst_3d[x][y][i] = (
-                    2 * float(array[x][y][i] - min[i]) / float(max[i] - min[i]) - 1
+                    scale * float(array[x][y][i] - min[i]) / float(max[i] - min[i])
+                    - scale / 2.0
                 )
     return dst_3d
 

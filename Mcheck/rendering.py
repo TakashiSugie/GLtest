@@ -1,14 +1,24 @@
 #!env python
 
+# レンダリング三枚の縮尺を揃える（max minを共有すれば行けそう）
+# 実際にW座標系で統合を行う（両方の点群を足し合わせるだけで良い）
+
+
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import numpy as np
 import cv2
 
+from PIL import Image
+from PIL import ImageOps
+
+
 # from evaluation import checkMaxMin
 from setVerts import setVertsFromNpy, setVertsFromPly
 from variable import saveName
+
+# from libs import capture
 
 LeftButtonOn = False
 RightButtonOn = False
@@ -16,8 +26,28 @@ Angle1 = 0
 Angle2 = 0
 Distance = 7.0
 px, py = -1, -1
+windowSize = 512
+angleRange = 5.0
+# plyName = "input_Cam080"
+# plyName = "input_Cam000"
+plyName = saveName
 
-mesh_fi = "./mesh/" + saveName + ".ply"
+# mesh_fi = "./mesh/" + saveName + ".ply"
+mesh_fi = "./mesh/" + plyName + ".ply"
+
+
+def capture():
+    width = glutGet(GLUT_WINDOW_WIDTH)
+    height = glutGet(GLUT_WINDOW_HEIGHT)
+    # キャプチャ
+    glReadBuffer(GL_FRONT)
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
+    data = glReadPixels(0, 0, width, height, GL_BGRA, GL_UNSIGNED_BYTE, None)
+
+    image = np.frombuffer(data, dtype=np.uint8).reshape(width, height, 4)
+    # capturePath = mesh_fi.replace("ply", "png")
+    cv2.imwrite("./capture/" + plyName + ".png", np.flipud(image))
+    print("capture now...")
 
 
 def mouse(button, state, x, y):
@@ -69,6 +99,8 @@ def keyboard(key, x, y):
         sys.exit()
     elif key.decode() == "j":
         Angle2 += 10.0
+    elif key.decode() == "s":
+        capture()
     else:
         print(key.decode())
 
@@ -77,7 +109,7 @@ def resize_cb(w, h):
     glViewport(0, 0, w, h)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(30.0, w / h, 1, 1000.0)  # 視体積を設定することができる
+    gluPerspective(angleRange, w / h, 1, 1000.0)  # 視体積を設定することができる
     glMatrixMode(GL_MODELVIEW)
 
 
@@ -102,7 +134,7 @@ def draw():
     glBegin(GL_POINTS)
     for vert in verts:
         glColor3d(vert[3], vert[4], vert[5])
-        glVertex3f(vert[0], vert[1], vert[2])
+        glVertex3f(vert[0], vert[1], -vert[2])
     glEnd()
     glFlush()
     glutSwapBuffers()
@@ -110,7 +142,7 @@ def draw():
 
 glutInit(sys.argv)
 glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
-glutInitWindowSize(320, 320)
+glutInitWindowSize(windowSize, windowSize)
 glutCreateWindow("PyOpenGL 11")
 glutDisplayFunc(draw)
 glutReshapeFunc(resize_cb)
@@ -129,4 +161,5 @@ verts_np3d = setVertsFromPly(mesh_fi)
 verts = list(np.reshape(verts_np3d, (verts_np3d.shape[0] * verts_np3d.shape[1], 6)))
 # checkMaxMin(verts)
 print("len_verts:", len(verts))
+
 glutMainLoop()
