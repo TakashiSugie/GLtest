@@ -93,13 +93,25 @@ def motion(x, y):
 
 
 def keyboard(key, x, y):
-    global Angle2
+    global Angle2, Angle1
     if key.decode() == "\033":  # Escape
         sys.exit()
     elif key.decode() == "q":
         sys.exit()
-    elif key.decode() == "j":
-        Angle2 += 10.0
+    elif key.decode() == "h":
+        Angle2 += 0.1
+        glutPostRedisplay()
+    elif key.decode() == "H":
+        Angle2 -= 0.1
+        glutPostRedisplay()
+    elif key.decode() == "v":
+        Angle1 += 0.1
+        glutPostRedisplay()
+
+    elif key.decode() == "V":
+        Angle1 -= 0.1
+        glutPostRedisplay()
+
     elif key.decode() == "s":
         capture()
     else:

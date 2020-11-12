@@ -23,7 +23,8 @@ def readCg(cgPath):
 
 def matLoad(u, v):
     mat = sio.loadmat(
-        "/home/takashi/Desktop/dataset/from_iwatsuki/mat_file/additional_disp_mat/%s.mat"
+        # "/home/takashi/Desktop/dataset/from_iwatsuki/mat_file/additional_disp_mat/%s.mat"
+        "../../for_mac/mat_file/additional_disp_mat/%s.mat"
         % LFName
     )
     disp_gt = mat["depth"]
@@ -34,7 +35,8 @@ u1, v1 = 0, 0
 u2, v2 = 8, 8  # 0~8(uが→方向　vが下方向)
 camNum1 = u1 * 9 + v1
 camNum2 = u2 * 9 + v2
-basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
+# basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
+basePath = "../../for_mac/lf_dataset/additional"
 LFName = "antinous"
 cfgName = "parameters.cfg"
 cgPath = os.path.join(basePath, LFName, cfgName)
