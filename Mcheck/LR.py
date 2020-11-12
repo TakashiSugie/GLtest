@@ -61,7 +61,7 @@ def LR(X, Y):
         for i in range(4):
             predict += a[i] * X[sample_index][i]
         # predict = +no_intercept
-        # print("predict:", predict, "  GT", Y[sample_index])
+        print("predict:", predict, "  GT", Y[sample_index])
         error += np.abs(predict - Y[sample_index])
         count += 1
     return a

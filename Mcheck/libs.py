@@ -47,4 +47,4 @@ def pix2m_disp(x, y, imgIdx):
         Z = 0
     X = float(x) * Z / f_pix
     Y = float(y) * Z / f_pix
-    return X, Y, Z
+    return X, Y, Z  # 単位はmm

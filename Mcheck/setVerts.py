@@ -35,6 +35,9 @@ ratio = 0.000003
 verts = []
 vert_point = []
 
+sameMin = []
+sameMax = []
+
 
 def makeDepthImg():
     file_name = "tower"
@@ -107,10 +110,25 @@ def setVertsFromPly(mesh_fi):
     colors = npyVerts[:, :, 3:6]
     points = npyVerts[:, :, 0:3]
     points_np3d = np.reshape(np.array(points), img.shape)
-    points_np = mmNormal(points_np3d)
+    points_np = mmNormalSameMinMax(points_np3d)
+    # points_np = mmNormal(points_np3d)
     colors_np = np.reshape(np.array(colors), img.shape)
     verts = np.concatenate((points_np, colors_np), axis=2)
     return verts
+
+
+# def setVertsFromPlySameMinMax(mesh_fi,min.max):
+#     global verts
+#     npyVerts = readPly(mesh_fi)
+
+#     print(npyVerts.shape)
+#     colors = npyVerts[:, :, 3:6]
+#     points = npyVerts[:, :, 0:3]
+#     points_np3d = np.reshape(np.array(points), img.shape)
+#     points_np = mmNormal(points_np3d)
+#     colors_np = np.reshape(np.array(colors), img.shape)
+#     verts = np.concatenate((points_np, colors_np), axis=2)
+#     return verts
 
 
 def pointsNormal(points_np3d):
@@ -129,6 +147,33 @@ def mmNormal(array):
             for y in range(array.shape[0]):
                 dst_3d[x][y][i] = (
                     scale * float(array[x][y][i] - min[i]) / float(max[i] - min[i])
+                    - scale / 2.0
+                )
+    return dst_3d
+
+
+def setMinMax(array):
+    global sameMax, sameMin
+    for i in range(3):
+        if len(sameMax) < 4:
+            sameMax.append(np.max(array[:, :, i]))
+            sameMin.append(np.min(array[:, :, i]))
+
+
+def mmNormalSameMinMax(array):
+    # max, min = [], []
+    setMinMax(array)
+    scale = 0.5
+    dst_3d = np.zeros(array.shape)
+    for i in range(3):
+        # max.append(np.max(array[:, :, i]))
+        # min.append(np.min(array[:, :, i]))
+        for x in range(array.shape[1]):
+            for y in range(array.shape[0]):
+                dst_3d[x][y][i] = (
+                    scale
+                    * float(array[x][y][i] - sameMin[i])
+                    / float(sameMax[i] - sameMin[i])
                     - scale / 2.0
                 )
     return dst_3d
