@@ -86,7 +86,7 @@ def readPly(mesh_fi):
         if len(str_info) == 6:
             vx, vy, vz, r, g, b = str_info
         else:
-            vx, vy, vz, r, g, b, hi = str_info
+            vx, vy, vz, r, g, b, _ = str_info
         vertsList.append(
             [
                 float(vx),
@@ -97,6 +97,7 @@ def readPly(mesh_fi):
                 float(b / 255),
             ]
         )
+    # vertsList
     return np.reshape(np.array(vertsList), (img.shape[0], img.shape[1], 6))
 
 

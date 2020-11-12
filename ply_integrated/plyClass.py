@@ -93,6 +93,10 @@ class Ply:
         self.v_line = "\n".join(self.v_list)
         self.f_line = "".join(self.f_infos)
 
+    def integrate(self, v_infos_add):
+        self.v_infos += v_infos_add[0]
+        self.num_vertex += v_infos_add[1]
+
 
 if __name__ == "__main__":
     mesh_fi = "./mesh/input_Cam000.ply"
