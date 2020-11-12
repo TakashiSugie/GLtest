@@ -154,13 +154,9 @@ glutMotionFunc(motion)
 glClearColor(0.0, 0.0, 1.0, 0.0)
 glEnable(GL_DEPTH_TEST)
 # verts_np3d = setVertsFromNpy()
-verts_np3d = setVertsFromPly(mesh_fi)
-# np.savetxt(
-#     "fromImg.txt",
-#     np.reshape(verts_np3d, (verts_np3d.shape[0] * verts_np3d.shape[1], 6)),
-# )
-verts = list(np.reshape(verts_np3d, (verts_np3d.shape[0] * verts_np3d.shape[1], 6)))
-# checkMaxMin(verts)
+verts_np = setVertsFromPly(mesh_fi)
+verts = list(verts_np)
+
 print("len_verts:", len(verts))
 
 glutMainLoop()

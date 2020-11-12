@@ -98,7 +98,8 @@ def readPly(mesh_fi):
             ]
         )
     # vertsList
-    return np.reshape(np.array(vertsList), (img.shape[0], img.shape[1], 6))
+    # return np.reshape(np.array(vertsList), (img.shape[0], img.shape[1], 6))
+    return np.array(vertsList)
 
 
 def setVertsFromPly(mesh_fi):
@@ -108,28 +109,14 @@ def setVertsFromPly(mesh_fi):
     npyVerts = readPly(mesh_fi)
 
     print(npyVerts.shape)
-    colors = npyVerts[:, :, 3:6]
-    points = npyVerts[:, :, 0:3]
-    points_np3d = np.reshape(np.array(points), img.shape)
-    points_np = mmNormalSameMinMax(points_np3d)
+    colors = npyVerts[:, 3:6]
+    points = npyVerts[:, 0:3]
+    # points_np3d = np.reshape(np.array(points), img.shape)
+    points_np = mmNormalSameMinMax(np.array(points))
     # points_np = mmNormal(points_np3d)
-    colors_np = np.reshape(np.array(colors), img.shape)
-    verts = np.concatenate((points_np, colors_np), axis=2)
+    # colors_np = np.reshape(np.array(colors), img.shape)
+    verts = np.concatenate((points_np, colors), axis=1)
     return verts
-
-
-# def setVertsFromPlySameMinMax(mesh_fi,min.max):
-#     global verts
-#     npyVerts = readPly(mesh_fi)
-
-#     print(npyVerts.shape)
-#     colors = npyVerts[:, :, 3:6]
-#     points = npyVerts[:, :, 0:3]
-#     points_np3d = np.reshape(np.array(points), img.shape)
-#     points_np = mmNormal(points_np3d)
-#     colors_np = np.reshape(np.array(colors), img.shape)
-#     verts = np.concatenate((points_np, colors_np), axis=2)
-#     return verts
 
 
 def pointsNormal(points_np3d):
@@ -157,27 +144,24 @@ def setMinMax(array):
     global sameMax, sameMin
     for i in range(3):
         if len(sameMax) < 4:
-            sameMax.append(np.max(array[:, :, i]))
-            sameMin.append(np.min(array[:, :, i]))
+            sameMax.append(np.max(array[:, i]))
+            sameMin.append(np.min(array[:, i]))
 
 
 def mmNormalSameMinMax(array):
     # max, min = [], []
     setMinMax(array)
     scale = 0.5
-    dst_3d = np.zeros(array.shape)
+    dst = np.zeros(array.shape)
     for i in range(3):
-        # max.append(np.max(array[:, :, i]))
-        # min.append(np.min(array[:, :, i]))
-        for x in range(array.shape[1]):
-            for y in range(array.shape[0]):
-                dst_3d[x][y][i] = (
-                    scale
-                    * float(array[x][y][i] - sameMin[i])
-                    / float(sameMax[i] - sameMin[i])
-                    - scale / 2.0
-                )
-    return dst_3d
+        for line in range(array.shape[0]):
+            dst[line][i] = (
+                scale
+                * float(array[line][i] - sameMin[i])
+                / float(sameMax[i] - sameMin[i])
+                - scale / 2.0
+            )
+    return dst
 
 
 if __name__ == "__main__":
