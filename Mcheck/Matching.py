@@ -45,13 +45,22 @@ def flannMatching(hacker, items):
 
 def saveCsv(matches, kp_train, kp_query):
     for i in range(len(matches)):
-        df.loc["Matches" + str(i)] = [
-            kp_train[matches[i][0].queryIdx].pt[0],
-            kp_train[matches[i][0].queryIdx].pt[1],
-            kp_query[matches[i][0].trainIdx].pt[0],
-            kp_query[matches[i][0].trainIdx].pt[1],
-            matches[i][0].distance,
-        ]
+        xyDistance = np.square(
+            kp_train[matches[i][0].queryIdx].pt[0]
+            - kp_query[matches[i][0].trainIdx].pt[0]
+        ) + np.square(
+            kp_train[matches[i][0].queryIdx].pt[1]
+            - kp_query[matches[i][0].trainIdx].pt[1]
+        )
+        # xyDistance = 0  # これをコメントアウトするとしきい値を考慮
+        if xyDistance < 100:
+            df.loc["Matches" + str(i)] = [
+                kp_train[matches[i][0].queryIdx].pt[0],
+                kp_train[matches[i][0].queryIdx].pt[1],
+                kp_query[matches[i][0].trainIdx].pt[0],
+                kp_query[matches[i][0].trainIdx].pt[1],
+                matches[i][0].distance,
+            ]
 
     df.to_csv("1" + "_" + "2" + ".csv")
 

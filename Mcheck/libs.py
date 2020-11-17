@@ -45,8 +45,8 @@ def pix2m_disp(x, y, imgIdx):
     else:
         print("zero!!")
         Z = 0
-    # X = (float(x) - dispImg1.shape[1]) * Z / f_pix
-    # Y = (float(y) - dispImg1.shape[0]) * Z / f_pix
-    X = float(x) * Z / f_pix
-    Y = float(y) * Z / f_pix
+    X = (float(x) - float(dispImg1.shape[1] / 2.0)) * Z / f_pix
+    Y = (float(y) - float(dispImg1.shape[0] / 2.0)) * Z / f_pix
+    # X = float(x) * Z / f_pix
+    # Y = float(y) * Z / f_pix
     return X, Y, Z  # 単位はmm
