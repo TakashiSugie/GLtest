@@ -82,7 +82,7 @@ def createData():
     y_train = list(np.array(y_train).T)
 
     for i in range(3):
-        M.append(LR(X_train, y_train[i]))
+        M.append(LR_(X_train, y_train[i]))
     return M
 
 
