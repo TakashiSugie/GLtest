@@ -33,7 +33,7 @@ angleRange = 5.0
 plyName = saveName
 
 # mesh_fi = "./mesh/" + saveName + ".ply"
-mesh_fi = "./mesh/" + plyName + ".ply"
+# mesh_fi = "./mesh/" + plyName + ".ply"
 mesh_fi = "./mesh/" + plyName + "_integrated.ply"
 
 
