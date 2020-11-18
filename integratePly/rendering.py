@@ -93,7 +93,7 @@ def motion(x, y):
 
 
 def keyboard(key, x, y):
-    global Angle2, Angle1
+    global Angle2, Angle1, Distance
     if key.decode() == "\033":  # Escape
         sys.exit()
     elif key.decode() == "q":
@@ -110,6 +110,13 @@ def keyboard(key, x, y):
 
     elif key.decode() == "V":
         Angle1 -= 0.1
+        glutPostRedisplay()
+    elif key.decode() == "d":
+        Distance += 3
+        glutPostRedisplay()
+
+    elif key.decode() == "D":
+        Distance -= 3
         glutPostRedisplay()
 
     elif key.decode() == "s":
@@ -143,7 +150,7 @@ def draw():
         0.0,
         0.0,
     )
-    glPointSize(2)
+    glPointSize(3)
     glBegin(GL_POINTS)
     for vert in verts:
         glColor3d(vert[3], vert[4], vert[5])
