@@ -54,3 +54,7 @@ dispImg2 = matLoad(u2, v2)
 width = img1.shape[1]
 height = img1.shape[0]
 saveName = LFName + "_" + str(camNum1) + "_" + str(camNum2)
+
+# if __name__ == "__main__":
+#     print(dispImg1.shape)
+#     print(type(dispImg1))

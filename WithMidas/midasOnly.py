@@ -20,7 +20,10 @@ from networks import Inpaint_Color_Net, Inpaint_Depth_Net, Inpaint_Edge_Net
 from MiDaS.run import run_depth
 from MiDaS.monodepth_net import MonoDepthNet
 import MiDaS.MiDaS_utils as MiDaS_utils
-from bilateral_filtering import sparse_bilateral_filtering
+
+# npy形式でDepthもどきを出力する、形状は画像のサイズと同じ浮動小数の配列
+# しかし、負の数も出てくるので厳密にはDepthではない
+# 系は崩れていないと考えて、そのまま使用する
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -43,14 +46,7 @@ if isinstance(config["gpu_ids"], int) and (config["gpu_ids"] >= 0):
 else:
     device = "cpu"
 print(f"running on device {device}")
-# device = "cpu"
-# dev = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-# "cpu"? "cuda:0"? torch.device('cpu')?
 device = torch.device("cpu")
-# Model = MonoDepthNet.to(device)
-# Model = MonoDepthNet()
-# summary(Model, (3, 384, 384))
-
 for idx in tqdm(range(len(sample_list))):
     depth = None
     sample = sample_list[idx]
