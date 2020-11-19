@@ -1,7 +1,7 @@
 #!/bin/bash
 #npy plyfromnpy
 #matching 2d→3d LR create
-
+#LFmesh2でやると警告が出るけど気にしない
 #Matching LR createNewPly rendering
 #makeNpy plyFromNpy FP3d_3d
 set -e
