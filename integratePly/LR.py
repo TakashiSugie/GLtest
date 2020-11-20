@@ -14,7 +14,6 @@ count = 0
 def read3Dnp(npPath):
     FPnp = np.load(npPath)
     FPDict = {}
-
     for idx in range(FPnp.shape[0]):
         # FPDict[FPnp[idx][0]] = [
         FPDict[str(idx)] = [
@@ -71,7 +70,6 @@ def createData():
     M = []
     FPDict1 = read3Dnp("./FP_3d/" + imgName1 + ".npy")  # ("key": (x1,y1,z1))
     FPDict2 = read3Dnp("./FP_3d/" + imgName2 + ".npy")  # ("key": (x1',y1',z1'))
-
     X_train, y_train = [], []
 
     for key, value1 in FPDict1.items():

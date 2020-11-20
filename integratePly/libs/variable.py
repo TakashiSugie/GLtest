@@ -3,14 +3,15 @@ import cv2
 import os
 import scipy.io as sio
 import re
+import glob
 
 # from libs import matLoad, readCg
 
 
-def readCg(cgPath, cgExist):
+def readCg(cgPath):
     patternList = ["focal_length_mm", "sensor_size_mm", "baseline_mm"]
     paraDict = {}
-    if cgExist:
+    if cgPath:
         with open(cgPath) as f:
             s = f.read()
             sLines = s.split("\n")
@@ -38,28 +39,59 @@ def matLoad(u, v):
     return disp_gt[u][v]
 
 
+def longerResize(img, longerSideLen=640):
+    longer = max(img.shape[0], img.shape[1])
+    fraq = float(longerSideLen) / float(longer)
+    if fraq < 1:
+        img = cv2.resize(img, (int(img.shape[1] * fraq), int(img.shape[0] * fraq)))
+    return img
+
+
 u1, v1 = 0, 0
 u2, v2 = 8, 8  # 0~8(uが→方向　vが下方向)
 camNum1 = u1 * 9 + v1
 camNum2 = u2 * 9 + v2
-# basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
-basePath = "/home/takashi/Desktop/dataset/lf_dataset/lf"
-# basePath = "../../for_mac/lf_dataset/additional"
-# LFName = "platonic"
-LFName = "cotton"
-cfgName = "parameters.cfg"
-cgPath = os.path.join(basePath, LFName, cfgName)
-cgExist = os.path.isfile(cgPath)
-paraDict = readCg(cgPath, cgExist)
+cgPath = None
+# content = "additional"
+# content = "lf"
+content = "ori"
 
-# imgName1 = "input_Cam{:03}".format(camNum1)
-# imgName2 = "input_Cam{:03}".format(camNum2)
-imgName1 = "00_00"
-imgName2 = "08_08"
+
+if content == "ori":
+    basePath = "/home/takashi/Desktop/dataset/image"
+    LFName = "copyMachine"
+    dirPath = os.path.join(basePath, LFName)
+    imgPathList = glob.glob(dirPath + "/*")
+    imgName1 = os.path.splitext(os.path.basename(imgPathList[0]))[0]
+    imgName2 = os.path.splitext(os.path.basename(imgPathList[1]))[0]
+    # print(imgName1)
+
+
+else:
+    basePath = os.path.join("/home/takashi/Desktop/dataset/lf_dataset", content)
+    LFName = "dino"
+    if content == "additional":
+        imgName1 = "input_Cam{:03}".format(camNum1)
+        imgName2 = "input_Cam{:03}".format(camNum2)
+        cfgName = "parameters.cfg"
+        cgPath = os.path.join(basePath, LFName, cfgName)
+        # cgExist = os.path.isfile(cgPath)
+    elif content == "lf":
+        imgName1 = "%02d_%02d" % (u1, v1)
+        imgName2 = "%02d_%02d" % (u2, v2)
+paraDict = readCg(cgPath)
+
+
+# basePath = "../../for_mac/lf_dataset/additional"
 imgPath1 = os.path.join(basePath, LFName, imgName1 + ".png")
 imgPath2 = os.path.join(basePath, LFName, imgName2 + ".png")
+# print(imgPath1)
+
 img1 = cv2.imread(imgPath1)
 img2 = cv2.imread(imgPath2)
+img1 = longerResize(img1, 640)
+img2 = longerResize(img2, 640)
+
 require_midas = True
 if require_midas:
     if os.path.isfile("./depth/" + imgName1 + ".npy"):

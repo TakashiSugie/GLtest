@@ -12,7 +12,7 @@ def readCVMatching(npyPath):
 
     FP_data = np.load(npyPath)
     for y in range(FP_data.shape[0]):
-        FP = (int(FP_data[y][0]), int(FP_data[y][1]))
+        FP = (int(FP_data[y][1]), int(FP_data[y][0]))
         featurePointList.append(FP)
     return featurePointList
 
