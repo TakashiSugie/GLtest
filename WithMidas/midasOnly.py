@@ -20,11 +20,12 @@ from networks import Inpaint_Color_Net, Inpaint_Depth_Net, Inpaint_Edge_Net
 from MiDaS.run import run_depth
 from MiDaS.monodepth_net import MonoDepthNet
 import MiDaS.MiDaS_utils as MiDaS_utils
+from libsLink.variable import imgName1, imgName2, basePath, LFName, imgPath1, imgPath2
 
 # npy形式でDepthもどきを出力する、形状は画像のサイズと同じ浮動小数の配列
 # しかし、負の数も出てくるので厳密にはDepthではない
 # 系は崩れていないと考えて、そのまま使用する
-
+# print(basePath)
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--config", type=str, default="argument.yml", help="Configure of post processing"
@@ -36,8 +37,14 @@ if config["offscreen_rendering"] is True:
 os.makedirs(config["mesh_folder"], exist_ok=True)
 os.makedirs(config["video_folder"], exist_ok=True)
 os.makedirs(config["depth_folder"], exist_ok=True)
+src_folder = os.path.join(basePath, LFName)
 sample_list = get_MiDaS_samples(
-    config["src_folder"], config["depth_folder"], config, config["specific"]
+    # config["src_folder"], config["depth_folder"], config, config["specific"]
+    src_folder,
+    config["depth_folder"],
+    config,
+    config["specific"],
+    inputImgNames=[imgName1, imgName2],
 )
 normal_canvas, all_canvas = None, None
 
@@ -56,8 +63,10 @@ for idx in tqdm(range(len(sample_list))):
 
     print(f"Running depth extraction at {time.time()}")
     if config["require_midas"] is True:
+        ref_img_fi = [imgPath1, imgPath2]
         run_depth(
-            [sample["ref_img_fi"]],
+            # [sample["ref_img_fi"]],
+            ref_img_fi,
             config["src_folder"],
             config["depth_folder"],
             config["MiDaS_model_ckpt"],

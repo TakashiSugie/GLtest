@@ -37,7 +37,7 @@ camNum1 = u1 * 9 + v1
 camNum2 = u2 * 9 + v2
 basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
 # basePath = "../../for_mac/lf_dataset/additional"
-LFName = "dishes"
+LFName = "antinous"
 cfgName = "parameters.cfg"
 cgPath = os.path.join(basePath, LFName, cfgName)
 paraDict = readCg(cgPath)
@@ -50,10 +50,17 @@ img1 = cv2.imread(imgPath1)
 img2 = cv2.imread(imgPath2)
 dispImg1 = matLoad(u1, v1)
 dispImg2 = matLoad(u2, v2)
+dispImg1 = np.load("./depth/" + imgName1 + ".npy")
+dispImg2 = np.load("./depth/" + imgName2 + ".npy")
+
+# ここをMidasOnlyから出てきたNpyに書き換える
+# Depthとかは正直おかしいかもしれないが、そこに関してはスルー
+# Depthか視差かも正直怪しい、disp→Depth変換をつけたりなしにする必要があるかも
 
 width = img1.shape[1]
 height = img1.shape[0]
 saveName = LFName + "_" + str(camNum1) + "_" + str(camNum2)
+
 
 # if __name__ == "__main__":
 #     print(dispImg1.shape)
