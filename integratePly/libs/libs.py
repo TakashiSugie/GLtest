@@ -50,3 +50,8 @@ def pix2m_disp(x, y, imgIdx):
     # X = float(x) * Z / f_pix
     # Y = float(y) * Z / f_pix
     return X, Y, Z  # 単位はmm
+
+
+def alphaCompositing(img1, img2):
+    dst = cv2.addWeighted(img1, 0.5, img2, 0.5, 0)
+    cv2.imwrite("appha.png", dst)

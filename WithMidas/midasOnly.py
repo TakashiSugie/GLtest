@@ -80,5 +80,5 @@ for idx in tqdm(range(len(sample_list))):
             config["MiDaS_model_ckpt"],
             MonoDepthNet,
             MiDaS_utils,
-            target_w=640,
+            target_w=512,
         )

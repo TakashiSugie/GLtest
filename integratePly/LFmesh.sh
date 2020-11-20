@@ -7,6 +7,7 @@
 set -e
 python ./libs/mymkdir.py
 python ../WithMidas/midasOnly.py
+# python alpha.py
 # python makeNpy.py
 # python plyFromNpy.py
 python plyFromImg.py
