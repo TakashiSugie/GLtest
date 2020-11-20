@@ -36,22 +36,29 @@ u2, v2 = 8, 8  # 0~8(uが→方向　vが下方向)
 camNum1 = u1 * 9 + v1
 camNum2 = u2 * 9 + v2
 basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
+# basePath = "/home/takashi/Desktop/dataset/lf_dataset/lf"
 # basePath = "../../for_mac/lf_dataset/additional"
-LFName = "antinous"
+LFName = "platonic"
+# LFName = "cotton"
 cfgName = "parameters.cfg"
 cgPath = os.path.join(basePath, LFName, cfgName)
 paraDict = readCg(cgPath)
 
 imgName1 = "input_Cam{:03}".format(camNum1)
 imgName2 = "input_Cam{:03}".format(camNum2)
+# imgName1 = "00_00"
+# imgName2 = "08_08"
 imgPath1 = os.path.join(basePath, LFName, imgName1 + ".png")
 imgPath2 = os.path.join(basePath, LFName, imgName2 + ".png")
 img1 = cv2.imread(imgPath1)
 img2 = cv2.imread(imgPath2)
-dispImg1 = matLoad(u1, v1)
-dispImg2 = matLoad(u2, v2)
-dispImg1 = np.load("./depth/" + imgName1 + ".npy")
-dispImg2 = np.load("./depth/" + imgName2 + ".npy")
+require_midas = False
+if require_midas:
+    dispImg1 = np.load("./depth/" + imgName1 + ".npy")
+    dispImg2 = np.load("./depth/" + imgName2 + ".npy")
+else:
+    dispImg1 = matLoad(u1, v1)
+    dispImg2 = matLoad(u2, v2)
 
 # ここをMidasOnlyから出てきたNpyに書き換える
 # Depthとかは正直おかしいかもしれないが、そこに関してはスルー

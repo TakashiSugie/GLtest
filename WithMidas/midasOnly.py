@@ -20,12 +20,21 @@ from networks import Inpaint_Color_Net, Inpaint_Depth_Net, Inpaint_Edge_Net
 from MiDaS.run import run_depth
 from MiDaS.monodepth_net import MonoDepthNet
 import MiDaS.MiDaS_utils as MiDaS_utils
-from libsLink.variable import imgName1, imgName2, basePath, LFName, imgPath1, imgPath2
+from libsLink.variable import (
+    imgName1,
+    imgName2,
+    basePath,
+    LFName,
+    imgPath1,
+    imgPath2,
+    require_midas,
+)
 
 # npy形式でDepthもどきを出力する、形状は画像のサイズと同じ浮動小数の配列
 # しかし、負の数も出てくるので厳密にはDepthではない
 # 系は崩れていないと考えて、そのまま使用する
 # print(basePath)
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--config", type=str, default="argument.yml", help="Configure of post processing"
@@ -60,9 +69,8 @@ for idx in tqdm(range(len(sample_list))):
     print("Current Source ==> ", sample["src_pair_name"])
     mesh_fi = os.path.join(config["mesh_folder"], sample["src_pair_name"] + ".ply")
     image = imageio.imread(sample["ref_img_fi"])
-
-    print(f"Running depth extraction at {time.time()}")
-    if config["require_midas"] is True:
+    if require_midas:
+        print(f"Running depth extraction at {time.time()}")
         ref_img_fi = [imgPath1, imgPath2]
         run_depth(
             # [sample["ref_img_fi"]],
