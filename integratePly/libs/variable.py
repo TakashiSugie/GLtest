@@ -52,6 +52,8 @@ u2, v2 = 8, 8  # 0~8(uが→方向　vが下方向)
 camNum1 = u1 * 9 + v1
 camNum2 = u2 * 9 + v2
 cgPath = None
+setFPAuto = True
+require_midas = True
 # content = "additional"
 # content = "lf"
 content = "ori"
@@ -92,7 +94,6 @@ img2 = cv2.imread(imgPath2)
 img1 = longerResize(img1, 640)
 img2 = longerResize(img2, 640)
 
-require_midas = True
 if require_midas:
     if os.path.isfile("./depth/" + imgName1 + ".npy"):
         dispImg1 = np.load("./depth/" + imgName1 + ".npy")

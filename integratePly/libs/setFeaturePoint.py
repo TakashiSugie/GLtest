@@ -2,20 +2,13 @@ import sys
 import os
 import numpy as np
 import cv2
-from variable import img1, img2, saveName, imgName1, imgName2
+from libs.variable import img1, img2, saveName, imgName1, imgName2
 
 # mouse callback function
 index1 = 0
 index2 = 0
 FPList1 = []
 FPList2 = []
-
-# args = sys.argv
-# img1Path = args[1]
-# img2Path = args[2]
-
-# imgName1 = os.path.splitext(os.path.basename(img1Path))[0]
-# imgName2 = os.path.splitext(os.path.basename(img2Path))[0]
 
 
 def draw_circle1(event, x, y, flags, param):
@@ -51,8 +44,6 @@ def draw_circle2(event, x, y, flags, param):
             cv2.LINE_AA,
         )
         index2 += 1
-        # cv2.putText()
-        # featurePointList2.append(str(x) + " " + str(y))
         FPList2.append(np.array([x, y]))
 
 
@@ -60,11 +51,12 @@ def saveNpy(FP1, FP2):
     file1_data = np.array(FP1)
     file2_data = np.array(FP2)
     print(file1_data.shape, file1_data.shape)
-    np.save("../FP_2d/FP_" + imgName1, file1_data)
-    np.save("../FP_2d/FP_" + imgName2, file2_data)
+    np.save("./FP_2d/FP_" + imgName1, file1_data)
+    np.save("./FP_2d/FP_" + imgName2, file2_data)
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
+def setFPManual():
     cv2.namedWindow("image1", cv2.WINDOW_NORMAL)
     cv2.setMouseCallback("image1", draw_circle1)
     cv2.namedWindow("image2", cv2.WINDOW_NORMAL)
@@ -79,3 +71,7 @@ if __name__ == "__main__":
     saveNpy(FPList1, FPList2)
     cv2.imwrite("../FPImg/" + imgName1 + ".png", img1)
     cv2.imwrite("../FPImg/" + imgName2 + ".png", img2)
+
+
+if __name__ == "__main__":
+    setFPManual()

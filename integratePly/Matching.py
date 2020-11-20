@@ -9,7 +9,8 @@ from copy import deepcopy
 import sys
 
 
-from libs.variable import imgName1, imgName2, imgPath1, imgPath2, saveName
+from libs.variable import imgName1, imgName2, imgPath1, imgPath2, saveName, setFPAuto
+from libs.setFeaturePoint import setFPManual
 
 # https: // code-graffiti.com/opencv-feature-matching-in-python/
 # https://python-debut.blogspot.com/2020/02/csv.html
@@ -94,14 +95,17 @@ def longerResize(img, longerSideLen):
 
 
 def main():
-    hacker = cv2.imread(imgPath1, 1)
-    items = cv2.imread(imgPath2, 1)
-    longer = max(hacker.shape[0], hacker.shape[1])
-    if longer > 640:
-        hacker = longerResize(hacker, 640)
-        items = longerResize(items, 640)
-    flannMatching(hacker=hacker, items=items)
-    saveNpy()
+    if setFPAuto:
+        hacker = cv2.imread(imgPath1, 1)
+        items = cv2.imread(imgPath2, 1)
+        longer = max(hacker.shape[0], hacker.shape[1])
+        if longer > 640:
+            hacker = longerResize(hacker, 640)
+            items = longerResize(items, 640)
+        flannMatching(hacker=hacker, items=items)
+        saveNpy()
+    else:
+        setFPManual()
 
 
 main()
