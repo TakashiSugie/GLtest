@@ -7,17 +7,24 @@ import re
 # from libs import matLoad, readCg
 
 
-def readCg(cgPath):
+def readCg(cgPath, cgExist):
     patternList = ["focal_length_mm", "sensor_size_mm", "baseline_mm"]
     paraDict = {}
-    with open(cgPath) as f:
-        s = f.read()
-        sLines = s.split("\n")
-        for sLine in sLines:
-            for pattern in patternList:
-                if re.match(pattern, sLine):
-                    sList = sLine.split()
-                    paraDict[pattern] = float(sList[2])
+    if cgExist:
+        with open(cgPath) as f:
+            s = f.read()
+            sLines = s.split("\n")
+            for sLine in sLines:
+                for pattern in patternList:
+                    if re.match(pattern, sLine):
+                        sList = sLine.split()
+                        paraDict[pattern] = float(sList[2])
+    else:
+        paraDict = {
+            "focal_length_mm": 100.0,
+            "sensor_size_mm": 35.0,
+            "baseline_mm": 90.0,
+        }
     return paraDict
 
 
@@ -35,27 +42,29 @@ u1, v1 = 0, 0
 u2, v2 = 8, 8  # 0~8(uが→方向　vが下方向)
 camNum1 = u1 * 9 + v1
 camNum2 = u2 * 9 + v2
-basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
-# basePath = "/home/takashi/Desktop/dataset/lf_dataset/lf"
+# basePath = "/home/takashi/Desktop/dataset/lf_dataset/additional"
+basePath = "/home/takashi/Desktop/dataset/lf_dataset/lf"
 # basePath = "../../for_mac/lf_dataset/additional"
-LFName = "platonic"
-# LFName = "cotton"
+# LFName = "platonic"
+LFName = "cotton"
 cfgName = "parameters.cfg"
 cgPath = os.path.join(basePath, LFName, cfgName)
-paraDict = readCg(cgPath)
+cgExist = os.path.isfile(cgPath)
+paraDict = readCg(cgPath, cgExist)
 
-imgName1 = "input_Cam{:03}".format(camNum1)
-imgName2 = "input_Cam{:03}".format(camNum2)
-# imgName1 = "00_00"
-# imgName2 = "08_08"
+# imgName1 = "input_Cam{:03}".format(camNum1)
+# imgName2 = "input_Cam{:03}".format(camNum2)
+imgName1 = "00_00"
+imgName2 = "08_08"
 imgPath1 = os.path.join(basePath, LFName, imgName1 + ".png")
 imgPath2 = os.path.join(basePath, LFName, imgName2 + ".png")
 img1 = cv2.imread(imgPath1)
 img2 = cv2.imread(imgPath2)
-require_midas = False
+require_midas = True
 if require_midas:
-    dispImg1 = np.load("./depth/" + imgName1 + ".npy")
-    dispImg2 = np.load("./depth/" + imgName2 + ".npy")
+    if os.path.isfile("./depth/" + imgName1 + ".npy"):
+        dispImg1 = np.load("./depth/" + imgName1 + ".npy")
+        dispImg2 = np.load("./depth/" + imgName2 + ".npy")
 else:
     dispImg1 = matLoad(u1, v1)
     dispImg2 = matLoad(u2, v2)
