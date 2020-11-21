@@ -17,6 +17,8 @@ def main():
 
     mesh1 = Ply(mesh1_fi)
     mesh2 = Ply(mesh2_fi)
+    mesh1.changeColor(r=0, g=0, b=255, sigma=0.5)
+    # mesh2.changeColor(r=0, g=255, b=0)
     # mesh1_2_fi = "./mesh/" + saveName + ".ply"
     # mesh1_2 = Ply(mesh1_2_fi)
 

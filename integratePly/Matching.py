@@ -9,7 +9,15 @@ from copy import deepcopy
 import sys
 
 
-from libs.variable import imgName1, imgName2, imgPath1, imgPath2, saveName, setFPAuto
+from libs.variable import (
+    imgName1,
+    imgName2,
+    imgPath1,
+    imgPath2,
+    saveName,
+    setFPAuto,
+    threshold,
+)
 from libs.setFeaturePoint import setFPManual
 
 # https: // code-graffiti.com/opencv-feature-matching-in-python/
@@ -56,8 +64,9 @@ def saveCsv(matches, kp_train, kp_query):
             kp_train[matches[i][0].queryIdx].pt[1]
             - kp_query[matches[i][0].trainIdx].pt[1]
         )
-        xyDistance = 0  # これをコメントアウトするとしきい値を考慮
-        if xyDistance < 100:
+        if xyDistance > 100 and threshold:
+            pass
+        else:
             df.loc["Matches" + str(i)] = [
                 kp_train[matches[i][0].queryIdx].pt[0],
                 kp_train[matches[i][0].queryIdx].pt[1],

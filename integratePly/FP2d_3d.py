@@ -9,11 +9,14 @@ from libs.variable import imgName1, imgName2
 
 def readCVMatching(npyPath):
     featurePointList = []
-
     FP_data = np.load(npyPath)
+    print("FPset's number is %d" % FP_data.shape[0])
+    if FP_data.shape[0] < 10:
+        raise Exception("FPsets are too few")
     for y in range(FP_data.shape[0]):
         FP = (int(FP_data[y][1]), int(FP_data[y][0]))
         featurePointList.append(FP)
+    # print(FP_data.shape[0])
     return featurePointList
 
 

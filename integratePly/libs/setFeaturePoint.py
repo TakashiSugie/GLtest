@@ -69,8 +69,8 @@ def setFPManual():
             break
     cv2.destroyAllWindows()
     saveNpy(FPList1, FPList2)
-    cv2.imwrite("../FPImg/" + imgName1 + ".png", img1)
-    cv2.imwrite("../FPImg/" + imgName2 + ".png", img2)
+    cv2.imwrite("./FPImgManual/" + imgName1 + ".png", img1)
+    cv2.imwrite("./FPImgManual/" + imgName2 + ".png", img2)
 
 
 if __name__ == "__main__":

@@ -131,17 +131,43 @@ class Ply:
         self.hFov = 0.9272952180016122
         self.vFov = 0.9272952180016122
 
-    def changeColor(self, r=255, g=255, b=255):
-        self.v_list = []
+    def changeColor(self, r=255, g=255, b=255, sigma=1):
+        vertex_infos = []
         for v_info in self.v_infos:
             str_info = [float(v) for v in v_info.split("\n")[0].split(" ")]
             if len(str_info) == 6:
-                vx, vy, vz, _, _, _ = str_info
+                vx, vy, vz, oriR, oriG, oriB = str_info
             else:
-                vx, vy, vz, _, _, _, hi = str_info
-            self.v_list.append(" ".join(list(map(str, [vx, vy, vz, r, g, b, int(hi)]))))
-        self.v_line = "\n".join(self.v_list)
-        return self
+                vx, vy, vz, oriR, oriG, oriB, hi = str_info
+            if sigma < 1:
+                vertex_infos.append(
+                    " ".join(
+                        list(
+                            map(
+                                str,
+                                [
+                                    vx,
+                                    vy,
+                                    vz,
+                                    int(oriR * sigma),
+                                    int(oriG * sigma),
+                                    int(oriB * sigma),
+                                    int(hi),
+                                ],
+                            )
+                        )
+                    )
+                    + "\n"
+                )
+            else:
+                vertex_infos.append(
+                    " ".join(list(map(str, [vx, vy, vz, r, g, b, int(hi)]))) + "\n"
+                )
+        # self.v_line = "\n".join(vertex_infos)
+        del self.v_infos
+        self.v_infos = []
+        for vertex_info in vertex_infos:
+            self.v_infos.append(vertex_info)
 
 
 if __name__ == "__main__":

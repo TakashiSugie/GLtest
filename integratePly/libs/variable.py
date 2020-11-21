@@ -62,7 +62,6 @@ renderingPly = {
     4: "mesh1+mesh2_1",
 }
 renderingMode = 4
-# print(renderingPly[renderingMode])
 # content = "additional"
 # content = "lf"
 content = "ori"
@@ -70,33 +69,31 @@ content = "ori"
 
 if content == "ori":
     basePath = "/home/takashi/Desktop/dataset/image"
-    LFName = "B"
+    LFName = "turtle"
     dirPath = os.path.join(basePath, LFName)
     imgPathList = glob.glob(dirPath + "/*")
     imgName1 = os.path.splitext(os.path.basename(imgPathList[0]))[0]
     imgName2 = os.path.splitext(os.path.basename(imgPathList[1]))[0]
-    # print(imgName1)
+    threshold = False
 
 
 else:
     basePath = os.path.join("/home/takashi/Desktop/dataset/lf_dataset", content)
-    LFName = "dino"
+    LFName = "tomb"
     if content == "additional":
         imgName1 = "input_Cam{:03}".format(camNum1)
         imgName2 = "input_Cam{:03}".format(camNum2)
         cfgName = "parameters.cfg"
         cgPath = os.path.join(basePath, LFName, cfgName)
-        # cgExist = os.path.isfile(cgPath)
     elif content == "lf":
         imgName1 = "%02d_%02d" % (u1, v1)
         imgName2 = "%02d_%02d" % (u2, v2)
+    threshold = True
 paraDict = readCg(cgPath)
 
 
-# basePath = "../../for_mac/lf_dataset/additional"
 imgPath1 = os.path.join(basePath, LFName, imgName1 + ".png")
 imgPath2 = os.path.join(basePath, LFName, imgName2 + ".png")
-# print(imgPath1)
 
 img1 = cv2.imread(imgPath1)
 img2 = cv2.imread(imgPath2)
@@ -118,8 +115,3 @@ else:
 width = img1.shape[1]
 height = img1.shape[0]
 saveName = LFName + "_" + str(camNum1) + "_" + str(camNum2)
-
-
-# if __name__ == "__main__":
-#     print(dispImg1.shape)
-#     print(type(dispImg1))
