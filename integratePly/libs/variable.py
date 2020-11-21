@@ -52,8 +52,17 @@ u2, v2 = 8, 8  # 0~8(uが→方向　vが下方向)
 camNum1 = u1 * 9 + v1
 camNum2 = u2 * 9 + v2
 cgPath = None
-setFPAuto = True
+setFPAuto = False
 require_midas = True
+longerSideLen = 640
+renderingPly = {
+    1: "mesh1",
+    2: "mesh2",
+    3: "mesh2_1",
+    4: "mesh1+mesh2_1",
+}
+renderingMode = 4
+# print(renderingPly[renderingMode])
 # content = "additional"
 # content = "lf"
 content = "ori"
@@ -61,7 +70,7 @@ content = "ori"
 
 if content == "ori":
     basePath = "/home/takashi/Desktop/dataset/image"
-    LFName = "copyMachine"
+    LFName = "B"
     dirPath = os.path.join(basePath, LFName)
     imgPathList = glob.glob(dirPath + "/*")
     imgName1 = os.path.splitext(os.path.basename(imgPathList[0]))[0]
@@ -91,8 +100,8 @@ imgPath2 = os.path.join(basePath, LFName, imgName2 + ".png")
 
 img1 = cv2.imread(imgPath1)
 img2 = cv2.imread(imgPath2)
-img1 = longerResize(img1, 640)
-img2 = longerResize(img2, 640)
+img1 = longerResize(img1, longerSideLen=longerSideLen)
+img2 = longerResize(img2, longerSideLen=longerSideLen)
 
 if require_midas:
     if os.path.isfile("./depth/" + imgName1 + ".npy"):

@@ -16,7 +16,7 @@ from PIL import ImageOps
 
 # from evaluation import checkMaxMin
 from setVerts import setVertsFromNpy, setVertsFromPly
-from libs.variable import saveName
+from libs.variable import saveName, imgName1, imgName2, renderingMode, renderingPly
 
 # from libs import capture
 
@@ -28,13 +28,16 @@ Distance = 7.0
 px, py = -1, -1
 windowSize = 512
 angleRange = 5.0
-# plyName = "input_Cam080"
-# plyName = "input_Cam000"
-plyName = saveName
-
-# mesh_fi = "./mesh/" + saveName + ".ply"
-# mesh_fi = "./mesh/" + plyName + ".ply"
-mesh_fi = "./mesh/" + plyName + "_integrated.ply"
+if renderingMode == 1:
+    plyName = imgName1
+elif renderingMode == 2:
+    plyName = imgName2
+elif renderingMode == 3:
+    plyName = saveName
+elif renderingMode == 4:
+    plyName = saveName + "_integrated"
+mesh_fi = "./mesh/" + plyName + ".ply"
+print(renderingPly[renderingMode])
 
 
 def capture():
@@ -176,6 +179,6 @@ glEnable(GL_DEPTH_TEST)
 verts_np = setVertsFromPly(mesh_fi)
 verts = list(verts_np)
 
-print("len_verts:", len(verts))
+# print("len_verts:", len(verts))
 
 glutMainLoop()

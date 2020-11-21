@@ -12,8 +12,25 @@ import cv2
 import imageio
 
 
+def longerResize(img, longerSideLen=640):
+    longer = max(img.shape[0], img.shape[1])
+    fraq = float(longerSideLen) / float(longer)
+    if fraq < 1:
+        # img = cv2.resize(img, (int(img.shape[1] * fraq), int(img.shape[0] * fraq)))
+        return int(img.shape[0] * fraq), int(img.shape[1] * fraq)
+    else:
+        return img.shape[0], img.shape[1]
+
+
 def run_depth(
-    img_names, input_path, output_path, model_path, Net, utils, target_w=None
+    img_names,
+    input_path,
+    output_path,
+    model_path,
+    Net,
+    utils,
+    target_w=None,
+    longerSideLen=640,
 ):
     """Run MonoDepthNN to compute depth maps.
 
@@ -22,11 +39,11 @@ def run_depth(
         output_path (str): path to output folder
         model_path (str): path to saved model
     """
-    print("initialize")
+    # print("initialize")
 
     # select device
     device = torch.device("cpu")
-    print("device: %s" % device)
+    # print("device: %s" % device)
 
     # load network
     model = Net(model_path)
@@ -40,11 +57,11 @@ def run_depth(
     # create output folder
     os.makedirs(output_path, exist_ok=True)
 
-    print("start processing")
+    # print("start processing")
 
     for ind, img_name in enumerate(img_names):
 
-        print("  processing {} ({}/{})".format(img_name, ind + 1, num_images))
+        # print("  processing {} ({}/{})".format(img_name, ind + 1, num_images))
 
         # input
         img = utils.read_image(img_name)
@@ -54,9 +71,10 @@ def run_depth(
         #     int(round(img.shape[0] * scale)),
         #     int(round(img.shape[1] * scale)),
         # )
-        target_height, target_width = img.shape[0], img.shape[1]
+        # target_height, target_width = img.shape[0], img.shape[1]
+        target_height, target_width = longerResize(img, longerSideLen=longerSideLen)
         img_input = utils.resize_image(img)
-        print(img_input.shape)
+        # print(img_input.shape)
         img_input = img_input.to(device)
         # compute
         with torch.no_grad():
@@ -75,7 +93,7 @@ def run_depth(
         np.save(filename + ".npy", depth)
         utils.write_depth(filename, depth, bits=2)
 
-    print("finished")
+    # print("finished")
 
 
 # if __name__ == "__main__":

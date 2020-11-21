@@ -131,6 +131,18 @@ class Ply:
         self.hFov = 0.9272952180016122
         self.vFov = 0.9272952180016122
 
+    def changeColor(self, r=255, g=255, b=255):
+        self.v_list = []
+        for v_info in self.v_infos:
+            str_info = [float(v) for v in v_info.split("\n")[0].split(" ")]
+            if len(str_info) == 6:
+                vx, vy, vz, _, _, _ = str_info
+            else:
+                vx, vy, vz, _, _, _, hi = str_info
+            self.v_list.append(" ".join(list(map(str, [vx, vy, vz, r, g, b, int(hi)]))))
+        self.v_line = "\n".join(self.v_list)
+        return self
+
 
 if __name__ == "__main__":
     mesh_fi = "./mesh/input_Cam000.ply"

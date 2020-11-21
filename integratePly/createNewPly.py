@@ -11,6 +11,7 @@ from libs.variable import imgName1, imgName2, saveName
 def main():
     mesh1_fi = "./mesh/" + imgName1 + ".ply"
     mesh2_fi = "./mesh/" + imgName2 + ".ply"
+    mono_save_fi = "./mesh/" + saveName + ".ply"
     save_fi = "./mesh/" + saveName + "_integrated.ply"
     npyPath = "./M/" + saveName + ".npy"
 
@@ -22,6 +23,7 @@ def main():
     mesh1_2 = mesh1.dotsM(npyPath)
     # print(type(mesh1_2))
     # mesh1_2 = copy.deepcopy(mesh1)
+    mesh1_2.ClassWritePly(mono_save_fi)
     mesh1_2.integrate([mesh2.v_infos, mesh2.num_vertex])
     mesh1_2.ClassWritePly(save_fi)
 

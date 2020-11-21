@@ -28,6 +28,7 @@ from libsLink.variable import (
     imgPath1,
     imgPath2,
     require_midas,
+    longerSideLen,
 )
 
 # npy形式でDepthもどきを出力する、形状は画像のサイズと同じ浮動小数の配列
@@ -61,16 +62,16 @@ if isinstance(config["gpu_ids"], int) and (config["gpu_ids"] >= 0):
     device = config["gpu_ids"]
 else:
     device = "cpu"
-print(f"running on device {device}")
+# print(f"running on device {device}")
 device = torch.device("cpu")
 for idx in tqdm(range(len(sample_list))):
     depth = None
     sample = sample_list[idx]
-    print("Current Source ==> ", sample["src_pair_name"])
+    # print("Current Source ==> ", sample["src_pair_name"])
     mesh_fi = os.path.join(config["mesh_folder"], sample["src_pair_name"] + ".ply")
     image = imageio.imread(sample["ref_img_fi"])
     if require_midas:
-        print(f"Running depth extraction at {time.time()}")
+        # print(f"Running depth extraction at {time.time()}")
         ref_img_fi = [imgPath1, imgPath2]
         run_depth(
             # [sample["ref_img_fi"]],
@@ -81,4 +82,5 @@ for idx in tqdm(range(len(sample_list))):
             MonoDepthNet,
             MiDaS_utils,
             target_w=512,
+            longerSideLen=longerSideLen,
         )

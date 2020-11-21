@@ -52,7 +52,7 @@ def makeDepthImg():
     # cv2.imwrite(
     #     "./tower/depth_%d_%d.png" % (0, 0), min0_max1 * 255,
     # )
-    print("depth", min0_max1.shape)
+    # print("depth", min0_max1.shape)
     return min0_max1
 
 
@@ -80,7 +80,7 @@ def readPly(mesh_fi):
             break
     contents = ply_fi.readlines()
     vertex_infos = contents[:num_vertex]
-    print(num_vertex)
+    # print(num_vertex)
     for v_info in vertex_infos:
         str_info = [float(v) for v in v_info.split("\n")[0].split(" ")]
         if len(str_info) == 6:
@@ -108,7 +108,7 @@ def setVertsFromPly(mesh_fi):
     # npyVerts = readPly("./mesh/04_04.ply")
     npyVerts = readPly(mesh_fi)
 
-    print(npyVerts.shape)
+    # print(npyVerts.shape)
     colors = npyVerts[:, 3:6]
     points = npyVerts[:, 0:3]
     # points_np3d = np.reshape(np.array(points), img.shape)
@@ -167,4 +167,4 @@ def mmNormalSameMinMax(array):
 if __name__ == "__main__":
     # verts = setVertsFromNpy()
     verts = setVertsFromPly()
-    print(verts.shape)
+    # print(verts.shape)
