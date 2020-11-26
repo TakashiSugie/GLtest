@@ -2,8 +2,9 @@
 import numpy as np
 import os
 import sys
-import glob
-import copy
+
+# import glob
+# import copy
 from libs.plyClass import Ply
 from libs.variable import imgName1, imgName2, saveName
 

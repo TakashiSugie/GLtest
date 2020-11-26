@@ -1,9 +1,10 @@
 import sys
 import os
-import matplotlib.pyplot as plt
-from sklearn import linear_model
+
+# import matplotlib.pyplot as plt
 import numpy as np
-import glob
+
+# import glob
 from libs.variable import imgName1, imgName2, saveName
 
 
@@ -27,6 +28,8 @@ def read3Dnp(npPath):
 
 
 def LR_(X, Y):
+    from sklearn import linear_model
+
     global error, count
     clf = linear_model.LinearRegression()
     X = np.array(X)

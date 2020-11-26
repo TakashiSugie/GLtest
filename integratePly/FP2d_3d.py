@@ -1,8 +1,9 @@
 import numpy as np
 import sys
 import os
-import scipy.io as sio
-import re
+
+# import scipy.io as sio
+# import re
 from libs.libs import readCg, matLoad, pix2m_disp
 from libs.variable import imgName1, imgName2, setFPAuto
 

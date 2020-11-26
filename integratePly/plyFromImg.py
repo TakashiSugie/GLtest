@@ -1,7 +1,8 @@
 # create ply from npy
 
 import numpy as np
-import os
+
+# import os
 from libs.variable import imgName1, imgName2, img1, img2
 from libs.plyClass import Ply
 

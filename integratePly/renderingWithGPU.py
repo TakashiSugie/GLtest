@@ -10,10 +10,6 @@ from OpenGL.GLUT import *
 import numpy as np
 import cv2
 
-from PIL import Image
-from PIL import ImageOps
-from time import time
-
 # from evaluation import checkMaxMin
 from setVerts import setVertsFromPly, cvtVerts
 from libs.variable import saveName, imgName1, imgName2, renderingMode, renderingPly
@@ -85,8 +81,8 @@ def motion(x, y):
         gluLookAt(0, 0, 7.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
     elif LeftButtonOn == True:
         if py >= 0 and px >= 0:
-            Angle1 += float(-(y - py) / 100)
-            Angle2 += float((x - px) / 100)
+            Angle1 += float(-(y - py) / 50)
+            Angle2 += float((x - px) / 50)
         px = x
         py = y
     elif RightButtonOn == True:

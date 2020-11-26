@@ -7,8 +7,7 @@ import re
 
 # from normalization import checkMaxMin
 # from matLoader import makeDepthImg
-from sklearn import preprocessing
-import scipy.io as sio
+# import scipy.io as sio
 import os
 
 # img = cv2.imread("tower/input_Cam000.png")
@@ -40,6 +39,8 @@ sameMax = []
 
 
 def makeDepthImg():
+    from sklearn import preprocessing
+
     file_name = "tower"
 
     mat = sio.loadmat(
