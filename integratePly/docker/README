@@ -1,0 +1,8 @@
+host side:
+xhost +local:root
+
+
+docker build -t lfmesh:test .
+docker run -it --gpus all -v [dir]:/LFmesh/ -e DISPLAY=$DISPLAY --net host lfmesh:test /bin/bash
+python3 rendering.py
+
