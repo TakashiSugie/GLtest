@@ -81,17 +81,17 @@ def motion(x, y):
     if LeftButtonOn == True and RightButtonOn == True:
         Angle1 = 0
         Angle2 = 0
-        Distance = 7.0
-        gluLookAt(0, 0, 7.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+        Distance = 1.0
+        gluLookAt(0, 0, 7.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
     elif LeftButtonOn == True:
-        if px >= 0 and py >= 0:
-            Angle1 += float(-(x - px) / 100)
-            Angle2 += float((y - py) / 100)
+        if py >= 0 and px >= 0:
+            Angle1 += float(-(y - py) / 100)
+            Angle2 += float((x - px) / 100)
         px = x
         py = y
     elif RightButtonOn == True:
         if px >= 0 and py >= 0:
-            Distance += float(y - py) / 20
+            Distance += float(y - py) / 200
         px = x
         py = y
     else:
@@ -109,24 +109,24 @@ def keyboard(key, x, y):
     elif key.decode() == "q":
         sys.exit()
     elif key.decode() == "h":
-        Angle2 += 0.1
+        Angle2 += 1.0
         glutPostRedisplay()
     elif key.decode() == "H":
-        Angle2 -= 0.1
+        Angle2 -= 1.0
         glutPostRedisplay()
     elif key.decode() == "v":
-        Angle1 += 0.1
+        Angle1 += 1.0
         glutPostRedisplay()
 
     elif key.decode() == "V":
-        Angle1 -= 0.1
+        Angle1 -= 1.0
         glutPostRedisplay()
     elif key.decode() == "d":
-        Distance += 3
+        Distance += 0.5
         glutPostRedisplay()
 
     elif key.decode() == "D":
-        Distance -= 3
+        Distance -= 0.5
         glutPostRedisplay()
 
     elif key.decode() == "s":
@@ -183,21 +183,11 @@ def draw():
 
     glClearColor(0.0, 0.0, 0.0, 0.0)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    # glLoadIdentity()
-
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
-    gluLookAt(
-        Distance * np.cos(Angle2) * np.sin(Angle1),
-        Distance * np.sin(Angle2),
-        Distance * np.cos(Angle2) * np.cos(Angle1),
-        0.0,
-        0.0,
-        0.0,
-        -1.0,
-        0.0,
-        0.0,
-    )
+    gluLookAt(0, 0, Distance, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0)
+    glRotatef(Angle1, 0, 1, 0)
+    glRotatef(Angle2, 1, 0, 0)
     draw_cube2()
     glFlush()
     glutSwapBuffers()
@@ -236,7 +226,7 @@ print("verts loaded")
 glutInit(sys.argv)
 glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
 glutInitWindowSize(windowSize, windowSize)
-glutCreateWindow("PyOpenGL 11")
+glutCreateWindow(renderingPly[renderingMode])
 glutDisplayFunc(disp_func)
 glutIdleFunc(disp_func)
 glutReshapeFunc(reshape_func)

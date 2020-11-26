@@ -49,7 +49,7 @@ def pix2m_disp(x, y, imgIdx):
     Y = (float(y) - float(dispImg1.shape[0] / 2.0)) * Z / f_pix
     # X = float(x) * Z / f_pix
     # Y = float(y) * Z / f_pix
-    return X, Y, Z  # 単位はmm
+    return X, Y, -Z  # 単位はmm
 
 
 def alphaCompositing(img1, img2):

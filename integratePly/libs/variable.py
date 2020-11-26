@@ -56,14 +56,14 @@ setFPAuto = False
 useManualFP = False
 require_midas = True
 # longerSideLen = 640
-longerSideLen = 1280
+longerSideLen = 640
 renderingPly = {
     1: "mesh1",
     2: "mesh2",
     3: "mesh2_1",
     4: "mesh1+mesh2_1",
 }
-renderingMode = 4
+renderingMode = 1
 # content = "additional"
 # content = "lf"
 content = "ori"
@@ -71,7 +71,7 @@ content = "ori"
 
 if content == "ori":
     basePath = "/home/takashi/Desktop/dataset/image"
-    LFName = "panda2"
+    LFName = "copyMachine"
     dirPath = os.path.join(basePath, LFName)
     imgPathList = glob.glob(dirPath + "/*")
     imgName1 = os.path.splitext(os.path.basename(imgPathList[0]))[0]
