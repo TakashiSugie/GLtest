@@ -4,7 +4,7 @@ import os
 import scipy.io as sio
 import re
 from libs.libs import readCg, matLoad, pix2m_disp
-from libs.variable import imgName1, imgName2
+from libs.variable import imgName1, imgName2, setFPAuto
 
 
 def readCVMatching(npyPath):
@@ -28,10 +28,17 @@ def FP2d_3d(imgIdx, FP_2d):
 
 
 if __name__ == "__main__":
-    FP_2d_1 = readCVMatching("./FP_2d/FP_" + imgName1 + ".npy")
+    if setFPAuto:
+        FP_2d_1 = readCVMatching("./FP_2d/FP_" + imgName1 + ".npy")
+    else:
+        FP_2d_1 = readCVMatching("./FPManual/npy/" + imgName1 + "_FP.npy")
     FP_3d_1 = FP2d_3d(1, FP_2d_1)
     np.save("./FP_3d/" + imgName1, FP_3d_1)
 
-    FP_2d_2 = readCVMatching("./FP_2d/FP_" + imgName2 + ".npy")
+    # FP_2d_2 = readCVMatching("./FP_2d/npy/" + imgName2 + "_FP.npy")
+    if setFPAuto:
+        FP_2d_2 = readCVMatching("./FP_2d/FP_" + imgName2 + ".npy")
+    else:
+        FP_2d_2 = readCVMatching("./FPManual/npy/" + imgName2 + "_FP.npy")
     FP_3d_2 = FP2d_3d(2, FP_2d_2)
     np.save("./FP_3d/" + imgName2, FP_3d_2)

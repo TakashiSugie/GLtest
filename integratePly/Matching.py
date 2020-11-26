@@ -17,6 +17,7 @@ from libs.variable import (
     saveName,
     setFPAuto,
     threshold,
+    useManualFP,
 )
 from libs.setFeaturePoint import setFPManual
 
@@ -113,6 +114,8 @@ def main():
             items = longerResize(items, 640)
         flannMatching(hacker=hacker, items=items)
         saveNpy()
+    elif useManualFP:
+        pass
     else:
         setFPManual()
 

@@ -15,8 +15,9 @@ from PIL import ImageOps
 
 
 # from evaluation import checkMaxMin
-from setVerts import setVertsFromNpy, setVertsFromPly
-from libs.variable import saveName, imgName1, imgName2, renderingMode, renderingPly
+from setVerts import setVertsFromPly
+
+# from libs.variable import saveName, imgName1, imgName2, renderingMode, renderingPly
 
 # from libs import capture
 
@@ -28,16 +29,11 @@ Distance = 7.0
 px, py = -1, -1
 windowSize = 512
 angleRange = 5.0
-if renderingMode == 1:
-    plyName = imgName1
-elif renderingMode == 2:
-    plyName = imgName2
-elif renderingMode == 3:
-    plyName = saveName
-elif renderingMode == 4:
-    plyName = saveName + "_integrated"
+plyName = "bege4_0_80_integrated"
+
+#plyName = "0"
 mesh_fi = "./mesh/" + plyName + ".ply"
-print(renderingPly[renderingMode])
+# print(renderingPly[renderingMode])
 
 
 def capture():

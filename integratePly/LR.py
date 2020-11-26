@@ -15,7 +15,8 @@ def read3Dnp(npPath):
     FPnp = np.load(npPath)
     FPDict = {}
     for idx in range(FPnp.shape[0]):
-        # FPDict[FPnp[idx][0]] = [
+        Z = float(FPnp[idx][2])
+        # FPnp[idx] = FPnp[idx]/Z
         FPDict[str(idx)] = [
             float(FPnp[idx][0]),
             float(FPnp[idx][1]),
@@ -60,7 +61,7 @@ def LR(X, Y):
         for i in range(4):
             predict += a[i] * X[sample_index][i]
         # predict = +no_intercept
-        print("predict:", predict, "  GT", Y[sample_index])
+        # print("predict:", predict, "  GT", Y[sample_index])
         error += np.abs(predict - Y[sample_index])
         count += 1
     return a
@@ -80,7 +81,7 @@ def createData():
     y_train = list(np.array(y_train).T)
 
     for i in range(3):
-        M.append(LR_(X_train, y_train[i]))
+        M.append(LR(X_train, y_train[i]))
     return M
 
 

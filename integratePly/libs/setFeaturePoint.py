@@ -50,9 +50,13 @@ def draw_circle2(event, x, y, flags, param):
 def saveNpy(FP1, FP2):
     file1_data = np.array(FP1)
     file2_data = np.array(FP2)
-    print(file1_data.shape, file1_data.shape)
-    np.save("./FP_2d/FP_" + imgName1, file1_data)
-    np.save("./FP_2d/FP_" + imgName2, file2_data)
+    # print(file1_data.shape, file1_data.shape)
+    if file1_data.shape[0] > 9 and file1_data.shape == file2_data.shape:
+        np.save("./FPManual/npy/" + imgName1 + "_FP", file1_data)
+        np.save("./FPManual/npy/" + imgName2 + "_FP", file2_data)
+    else:
+        print(file1_data.shape)
+        raise Exception("FP shape is wrong")
 
 
 # if __name__ == "__main__":
@@ -69,8 +73,8 @@ def setFPManual():
             break
     cv2.destroyAllWindows()
     saveNpy(FPList1, FPList2)
-    cv2.imwrite("./FPImgManual/" + imgName1 + ".png", img1)
-    cv2.imwrite("./FPImgManual/" + imgName2 + ".png", img2)
+    cv2.imwrite("./FPManual/img/" + imgName1 + ".png", img1)
+    cv2.imwrite("./FPManual/img/" + imgName2 + ".png", img2)
 
 
 if __name__ == "__main__":

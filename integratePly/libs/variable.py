@@ -53,15 +53,17 @@ camNum1 = u1 * 9 + v1
 camNum2 = u2 * 9 + v2
 cgPath = None
 setFPAuto = False
+useManualFP = True
 require_midas = True
-longerSideLen = 640
+longerSideLen = 1280
+# longerSideLen = 1280
 renderingPly = {
     1: "mesh1",
     2: "mesh2",
     3: "mesh2_1",
     4: "mesh1+mesh2_1",
 }
-renderingMode = 4
+renderingMode = 1
 # content = "additional"
 # content = "lf"
 content = "ori"
@@ -69,7 +71,7 @@ content = "ori"
 
 if content == "ori":
     basePath = "/home/takashi/Desktop/dataset/image"
-    LFName = "turtle"
+    LFName = "bege4_"
     dirPath = os.path.join(basePath, LFName)
     imgPathList = glob.glob(dirPath + "/*")
     imgName1 = os.path.splitext(os.path.basename(imgPathList[0]))[0]
@@ -101,7 +103,9 @@ img1 = longerResize(img1, longerSideLen=longerSideLen)
 img2 = longerResize(img2, longerSideLen=longerSideLen)
 
 if require_midas:
-    if os.path.isfile("./depth/" + imgName1 + ".npy"):
+    if os.path.isfile("./depth/" + imgName1 + ".npy") and os.path.isfile(
+        "./depth/" + imgName2 + ".npy"
+    ):
         dispImg1 = np.load("./depth/" + imgName1 + ".npy")
         dispImg2 = np.load("./depth/" + imgName2 + ".npy")
 else:

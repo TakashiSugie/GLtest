@@ -80,7 +80,7 @@ class Ply:
         self.f_line = "".join(self.f_infos)
 
     def dotsM(self, npyPath):  # listで来たv_infosの各要素を取り出して、変換Mを行う、その後、str型に変換する
-        self.v_list = []
+        vertex_infos = []
         M = np.load(npyPath)
         for v_info in self.v_infos:
             str_info = [float(v) for v in v_info.split("\n")[0].split(" ")]
@@ -91,14 +91,20 @@ class Ply:
             oldV = np.array((vx, vy, vz, 1))
             NewV = np.dot(M, oldV)
             NewVx, NewVy, NewVz = NewV
-            self.v_list.append(
+            vertex_infos.append(
                 " ".join(
                     list(
                         map(str, [NewVx, NewVy, NewVz, int(r), int(g), int(b), int(hi)])
                     )
                 )
+                + "\n"
             )
-        self.v_line = "\n".join(self.v_list)
+        # self.v_line = "\n".join(vertex_infos)
+        del self.v_infos
+        self.v_infos = []
+        for vertex_info in vertex_infos:
+            self.v_infos.append(vertex_info)
+        self.v_line = "".join(vertex_infos)
         self.f_line = "".join(self.f_infos)
         return self
 
