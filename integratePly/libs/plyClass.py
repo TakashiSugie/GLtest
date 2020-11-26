@@ -50,7 +50,7 @@ class Ply:
             self.convertForWrite()
         else:
             self.dotsM(npyPath)
-
+        self.changeRound(roundNum=4)
         print("Writing mesh file %s ..." % save_fi)
         with open(save_fi, "w") as ply_fi:
             ply_fi.write("ply\n" + "format ascii 1.0\n")
@@ -170,6 +170,27 @@ class Ply:
                     " ".join(list(map(str, [vx, vy, vz, r, g, b, int(hi)]))) + "\n"
                 )
         # self.v_line = "\n".join(vertex_infos)
+        del self.v_infos
+        self.v_infos = []
+        for vertex_info in vertex_infos:
+            self.v_infos.append(vertex_info)
+
+    def changeRound(self, roundNum=4):
+        vertex_infos = []
+        for v_info in self.v_infos:
+            str_info = [float(v) for v in v_info.split("\n")[0].split(" ")]
+            if len(str_info) == 6:
+                vx, vy, vz, r, g, b = str_info
+            else:
+                vx, vy, vz, r, g, b, hi = str_info
+            # print("old:", vx, vy, vx)
+            vx, vy, vz = round(vx, roundNum), round(vy, roundNum), round(vz, roundNum)
+            # print("change:", vx, vy, vx)
+
+            vertex_infos.append(
+                " ".join(list(map(str, [vx, vy, vz, int(r), int(g), int(b), int(hi)])))
+                + "\n"
+            )
         del self.v_infos
         self.v_infos = []
         for vertex_info in vertex_infos:

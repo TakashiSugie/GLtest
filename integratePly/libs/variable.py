@@ -53,17 +53,17 @@ camNum1 = u1 * 9 + v1
 camNum2 = u2 * 9 + v2
 cgPath = None
 setFPAuto = False
-useManualFP = True
+useManualFP = False
 require_midas = True
+# longerSideLen = 640
 longerSideLen = 1280
-# longerSideLen = 1280
 renderingPly = {
     1: "mesh1",
     2: "mesh2",
     3: "mesh2_1",
     4: "mesh1+mesh2_1",
 }
-renderingMode = 1
+renderingMode = 4
 # content = "additional"
 # content = "lf"
 content = "ori"
@@ -71,7 +71,7 @@ content = "ori"
 
 if content == "ori":
     basePath = "/home/takashi/Desktop/dataset/image"
-    LFName = "bege4_"
+    LFName = "panda2"
     dirPath = os.path.join(basePath, LFName)
     imgPathList = glob.glob(dirPath + "/*")
     imgName1 = os.path.splitext(os.path.basename(imgPathList[0]))[0]

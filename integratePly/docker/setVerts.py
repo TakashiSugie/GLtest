@@ -119,6 +119,20 @@ def mmNormalSameMinMax(array):
     return dst
 
 
+def cvtVerts(verts):
+    cList, vList = [], []
+    for vert in verts:
+        if len(vert) == 6:
+            vx, vy, vz, r, g, b = vert
+        else:
+            vx, vy, vz, r, g, b, _ = vert
+        cList.append([r, g, b])
+        vList.append([vx, vy, vz])
+    cNP, vNP = np.array(cList), np.array(vList)
+    cFlat, vFlat = np.ravel(cNP), np.ravel(vNP)
+    return cFlat, vFlat
+
+
 if __name__ == "__main__":
     # verts = setVertsFromNpy()
     verts = setVertsFromPly()

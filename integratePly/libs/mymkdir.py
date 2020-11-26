@@ -7,6 +7,15 @@ def my_mkdir(path):
 
 
 if __name__ == "__main__":
-    dirList = ["M", "FPImg", "FP_2d", "FP_3d", "mesh", "depth"]
+    dirList = [
+        "M",
+        "FPImg",
+        "FP_2d",
+        "FP_3d",
+        "mesh",
+        "depth",
+        "FPManual/npy",
+        "FPManual/img",
+    ]
     for dir in dirList:
         my_mkdir(dir)
