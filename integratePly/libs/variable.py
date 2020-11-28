@@ -55,15 +55,15 @@ cgPath = None
 setFPAuto = False
 useManualFP = False
 require_midas = True
-# longerSideLen = 640
-longerSideLen = 640
+# longerSideLen = 160
+longerSideLen = 1008
 renderingPly = {
     1: "mesh1",
     2: "mesh2",
     3: "mesh2_1",
     4: "mesh1+mesh2_1",
 }
-renderingMode = 1
+renderingMode = 4
 # content = "additional"
 # content = "lf"
 content = "ori"
@@ -71,7 +71,7 @@ content = "ori"
 
 if content == "ori":
     basePath = "/home/takashi/Desktop/dataset/image"
-    LFName = "copyMachine"
+    LFName = "bege4_"
     dirPath = os.path.join(basePath, LFName)
     imgPathList = glob.glob(dirPath + "/*")
     imgName1 = os.path.splitext(os.path.basename(imgPathList[0]))[0]
@@ -81,7 +81,7 @@ if content == "ori":
 
 else:
     basePath = os.path.join("/home/takashi/Desktop/dataset/lf_dataset", content)
-    LFName = "tomb"
+    LFName = "tower"
     if content == "additional":
         imgName1 = "input_Cam{:03}".format(camNum1)
         imgName2 = "input_Cam{:03}".format(camNum2)

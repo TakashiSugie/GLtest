@@ -120,6 +120,16 @@ def setVertsFromPly(mesh_fi):
     return verts
 
 
+def setVertsFromPlySame(mesh_fi):
+    global verts
+    npyVerts = readPly(mesh_fi)
+    colors = npyVerts[:, 3:6]
+    points = npyVerts[:, 0:3]
+    points_np = mmNormalSameMinMax(np.array(points))
+    verts = np.concatenate((points_np, colors), axis=1)
+    return verts
+
+
 def pointsNormal(points_np3d):
     points_np3d_Normed = mmNormal(points_np3d)
     return points_np3d_Normed

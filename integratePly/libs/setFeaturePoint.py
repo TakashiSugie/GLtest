@@ -13,16 +13,19 @@ FPList2 = []
 
 def draw_circle1(event, x, y, flags, param):
     global index1, FPList1
+    # print(max(img1.shape))
+    circleSize = int(max(img1.shape) * 0.03)
+    textSize = int(max(img1.shape) * 0.005)
     if event == cv2.EVENT_LBUTTONDBLCLK:
-        cv2.circle(img1, (x, y), 5, (255, 0, 0), -1)
+        cv2.circle(img1, (x, y), circleSize, (255, 0, 0), -1)
         cv2.putText(
             img1,
             str(index1),
             (x, y),
             cv2.FONT_HERSHEY_PLAIN,
-            1,
+            textSize,
             (255, 255, 255),
-            1,
+            textSize,
             cv2.LINE_AA,
         )
         index1 += 1
@@ -31,16 +34,19 @@ def draw_circle1(event, x, y, flags, param):
 
 def draw_circle2(event, x, y, flags, param):
     global index2, FPList2
+    circleSize = int(max(img1.shape) * 0.03)
+    textSize = int(max(img1.shape) * 0.005)
+
     if event == cv2.EVENT_LBUTTONDBLCLK:
-        cv2.circle(img2, (x, y), 5, (255, 0, 0), -1)
+        cv2.circle(img2, (x, y), circleSize, (255, 0, 0), -1)
         cv2.putText(
             img2,
             str(index2),
             (x, y),
             cv2.FONT_HERSHEY_PLAIN,
-            1,
+            textSize,
             (255, 255, 255),
-            1,
+            textSize,
             cv2.LINE_AA,
         )
         index2 += 1
