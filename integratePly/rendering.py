@@ -26,7 +26,7 @@ Angle1 = 0
 Angle2 = 0
 Distance = 7.0
 px, py = -1, -1
-windowSize = 512
+windowSize = 1024#512
 angleRange = 5.0
 if renderingMode == 1:
     plyName = imgName1

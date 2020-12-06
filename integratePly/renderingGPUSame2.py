@@ -2,6 +2,7 @@
 
 # レンダリング三枚の縮尺を揃える（max minを共有すれば行けそう）
 # 実際にW座標系で統合を行う（両方の点群を足し合わせるだけで良い）
+#結論、同時に３つをVBOでやるのは厳しいので3つのスケールだけ合わせて、１個だけ表示をする
 
 
 from OpenGL.GL import *
@@ -12,7 +13,7 @@ import cv2
 
 # from evaluation import checkMaxMin
 from setVerts import setVertsFromPly, cvtVerts, setVertsFromPlySame
-from libs.variable import saveName, imgName1, imgName2, renderingPly
+from libs.variable import saveName, imgName1, imgName2, renderingPly, LFName
 
 # from libs import capture
 
@@ -22,7 +23,8 @@ Angle1 = 0
 Angle2 = 0
 Distance = 1.0
 px, py = -1, -1
-windowSize = 512
+# windowSize = 512
+windowSize = 1023
 angleRange = 5.0
 
 
@@ -31,24 +33,28 @@ mesh_fi2 = "./mesh/" + imgName2 + ".ply"
 mesh_fi3 = "./mesh/" + saveName + "_integrated" + ".ply"
 mesh_fi4 = "./mesh/" + saveName + ".ply"
 
+mesh_NameList = ["mesh1", "mesh2", "integrated", "M"]
 mesh_fiList = [mesh_fi1, mesh_fi2, mesh_fi3, mesh_fi4]
+mode = 2
+print(mesh_NameList[mode])
 
 
 def capture():
-    if not os.path.isdir("./capture/%s" % plyName):
-        os.makedirs("./capture/%s" % plyName)
+    if not os.path.isdir("./capture/%s/%s" % (LFName, mesh_NameList[mode])):
+        os.makedirs("./capture/%s/%s" % (LFName, mesh_NameList[mode]))
     width = glutGet(GLUT_WINDOW_WIDTH)
     height = glutGet(GLUT_WINDOW_HEIGHT)
     # キャプチャ
     glReadBuffer(GL_FRONT)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
+    # print(height)
     data = glReadPixels(0, 0, width, height, GL_BGRA, GL_UNSIGNED_BYTE, None)
 
     image = np.frombuffer(data, dtype=np.uint8).reshape(width, height, 4)
     # capturePath = mesh_fi.replace("ply", "png")
     cv2.imwrite(
-        "./capture/%s/%s_%.1f_%.1f_%d.png"
-        % (plyName, plyName, Angle1, Angle2, Distance),
+        "./capture/%s/%s/%.1f_%.1f_%d.png"
+        % (LFName, mesh_NameList[mode], Angle1, Angle2, Distance),
         np.flipud(image),
     )
     print("capture now...")
@@ -102,17 +108,17 @@ def keyboard(key, x, y):
     elif key.decode() == "q":
         sys.exit()
     elif key.decode() == "d":
-        Angle2 += 1.0
+        Angle2 += 10.0
         glutPostRedisplay()
     elif key.decode() == "a":
-        Angle2 -= 1.0
+        Angle2 -= 10.0
         glutPostRedisplay()
     elif key.decode() == "w":
-        Angle1 += 1.0
+        Angle1 += 10.0
         glutPostRedisplay()
 
     elif key.decode() == "s":
-        Angle1 -= 1.0
+        Angle1 -= 10.0
         glutPostRedisplay()
     elif key.decode() == "d":
         Distance += 0.5
@@ -403,10 +409,8 @@ for mesh_fi in mesh_fiList:
     verticesList.append(vertices)
 print("verts loaded")
 glutInit(sys.argv)
-mode = 4
-print(mode)
 # mode = input()
-if mode == 1:
+if mode == 0:
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
     glutInitWindowSize(windowSize, windowSize)
     winnum.append(glutCreateWindow(imgName1))
@@ -418,7 +422,7 @@ if mode == 1:
     glutMouseFunc(mouse)
     glutMotionFunc(motion)
 
-elif mode == 2:
+elif mode == 1:
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
     glutInitWindowSize(windowSize, windowSize)
     winnum.append(glutCreateWindow(imgName2))
@@ -430,7 +434,7 @@ elif mode == 2:
     glutMouseFunc(mouse)
     glutMotionFunc(motion)
 
-elif mode == 3:
+elif mode == 2:
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
     glutInitWindowSize(windowSize, windowSize)
     winnum.append(glutCreateWindow("integrated"))
@@ -442,7 +446,7 @@ elif mode == 3:
     glutMouseFunc(mouse)
     glutMotionFunc(motion)
     # print("test")
-elif mode == 4:
+elif mode == 3:
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
     glutInitWindowSize(windowSize, windowSize)
     winnum.append(glutCreateWindow("M"))

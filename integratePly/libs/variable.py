@@ -53,7 +53,7 @@ camNum1 = u1 * 9 + v1
 camNum2 = u2 * 9 + v2
 cgPath = None
 setFPAuto = False
-useManualFP = False
+useManualFP = True
 require_midas = True
 # longerSideLen = 160
 longerSideLen = 1008
@@ -63,7 +63,7 @@ renderingPly = {
     3: "mesh2_1",
     4: "mesh1+mesh2_1",
 }
-renderingMode = 4
+renderingMode = 1
 # content = "additional"
 # content = "lf"
 content = "ori"
