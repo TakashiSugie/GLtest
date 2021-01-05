@@ -52,7 +52,7 @@ u2, v2 = 8, 8  # 0~8(uが→方向　vが下方向)
 camNum1 = u1 * 9 + v1
 camNum2 = u2 * 9 + v2
 cgPath = None
-setFPAuto = True
+setFPAuto = False
 useManualFP = False
 require_midas = True
 # longerSideLen = 160
@@ -68,10 +68,9 @@ renderingMode = 1
 # content = "lf"
 content = "ori"
 
-
 if content == "ori":
     basePath = "/home/takashi/Desktop/dataset/image"
-    LFName = "train"
+    LFName = "bege4_"
     dirPath = os.path.join(basePath, LFName)
     imgPathList = glob.glob(dirPath + "/*")
     imgName1 = os.path.splitext(os.path.basename(imgPathList[0]))[0]
