@@ -15,7 +15,6 @@ def main():
     mono_save_fi = "./mesh/" + saveName + ".ply"
     save_fi = "./mesh/" + saveName + "_integrated.ply"
     npyPath = "./M/" + saveName + ".npy"
-
     mesh1 = Ply(mesh1_fi)
     mesh2 = Ply(mesh2_fi)
     # mesh1.changeColor(r=0, g=0, b=255, sigma=1.0)
@@ -24,7 +23,6 @@ def main():
     # mesh1_2 = Ply(mesh1_2_fi)
     # mesh1が7 mesh2が9 mesh1_2つまり、1を2の座標系、つまり7を9に、integratedにはmesh1+mesh1_2
     mesh1_2 = mesh1.dotsM(npyPath)
-    # print(type(mesh1_2))
     # mesh1_2 = copy.deepcopy(mesh1)
     mesh1_2.ClassWritePly(mono_save_fi)
     mesh1_2.integrate([mesh2.v_infos, mesh2.num_vertex])

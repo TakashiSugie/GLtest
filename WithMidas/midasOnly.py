@@ -64,6 +64,7 @@ else:
     device = "cpu"
 # print(f"running on device {device}")
 device = torch.device("cpu")
+# print(require_midas,len(sample_list))
 for idx in tqdm(range(len(sample_list))):
     depth = None
     sample = sample_list[idx]
@@ -73,6 +74,8 @@ for idx in tqdm(range(len(sample_list))):
     if require_midas:
         # print(f"Running depth extraction at {time.time()}")
         ref_img_fi = [imgPath1, imgPath2]
+        # print(ref_img_fi)
+
         run_depth(
             # [sample["ref_img_fi"]],
             ref_img_fi,

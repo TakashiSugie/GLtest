@@ -52,8 +52,8 @@ u2, v2 = 8, 8  # 0~8(uが→方向　vが下方向)
 camNum1 = u1 * 9 + v1
 camNum2 = u2 * 9 + v2
 cgPath = None
-setFPAuto = False
-useManualFP = True
+setFPAuto = True
+useManualFP = False
 require_midas = True
 # longerSideLen = 160
 longerSideLen = 1008
@@ -71,7 +71,7 @@ content = "ori"
 
 if content == "ori":
     basePath = "/home/takashi/Desktop/dataset/image"
-    LFName = "bege4_"
+    LFName = "train"
     dirPath = os.path.join(basePath, LFName)
     imgPathList = glob.glob(dirPath + "/*")
     imgName1 = os.path.splitext(os.path.basename(imgPathList[0]))[0]
@@ -101,7 +101,7 @@ img1 = cv2.imread(imgPath1)
 img2 = cv2.imread(imgPath2)
 img1 = longerResize(img1, longerSideLen=longerSideLen)
 img2 = longerResize(img2, longerSideLen=longerSideLen)
-
+# dispImg2, dispImg1 = None, None
 if require_midas:
     if os.path.isfile("./depth/" + imgName1 + ".npy") and os.path.isfile(
         "./depth/" + imgName2 + ".npy"

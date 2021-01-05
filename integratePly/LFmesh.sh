@@ -15,4 +15,5 @@ python Matching.py
 python FP2d_3d.py
 python LR.py
 python createNewPly.py
-python renderingGPU.py
+#python renderingGPU.py
+python rendering.py
