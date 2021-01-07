@@ -109,9 +109,9 @@ def main():
         hacker = cv2.imread(imgPath1, 1)
         items = cv2.imread(imgPath2, 1)
         longer = max(hacker.shape[0], hacker.shape[1])
-        if longer > 640:
-            hacker = longerResize(hacker, 640)
-            items = longerResize(items, 640)
+        # if longer > lon:
+        #     hacker = longerResize(hacker, 640)
+        #     items = longerResize(items, 640)
         flannMatching(hacker=hacker, items=items)
         saveNpy()
     elif useManualFP:

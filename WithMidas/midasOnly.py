@@ -75,6 +75,7 @@ for idx in tqdm(range(len(sample_list))):
         # print(f"Running depth extraction at {time.time()}")
         ref_img_fi = [imgPath1, imgPath2]
         # print(ref_img_fi)
+        print(longerSideLen)
 
         run_depth(
             # [sample["ref_img_fi"]],
