@@ -6,6 +6,7 @@ import numpy as np
 
 # import glob
 from libs.variable import imgName1, imgName2, saveName
+from sklearn import preprocessing
 
 
 error = 0
@@ -54,6 +55,12 @@ def LR(X, Y):
     global error, count
     X = np.array(X)
     Y = np.array(Y)
+    mm = preprocessing.MinMaxScaler()
+    # X = mm.fit_transform(X)
+    # Y = mm.fit_transform(Y)
+
+    # print(X_mm)
+    # print(Y)
     ones = np.ones((X.shape[0], 1))
     X = np.concatenate((X, ones), axis=1)
     a = np.dot(np.dot((np.linalg.inv(np.dot(X.T, X))), X.T), Y)

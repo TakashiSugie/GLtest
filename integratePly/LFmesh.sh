@@ -6,7 +6,8 @@
 #makeNpy plyFromNpy FP3d_3d
 set -e
 python ./libs/mymkdir.py
-python ../WithMidas/midasOnly.py
+# python ../WithMidas/midasOnly.py
+python ../onlyAdabins/infer.py
 # python alpha.py
 # python makeNpy.py
 # python plyFromNpy.py

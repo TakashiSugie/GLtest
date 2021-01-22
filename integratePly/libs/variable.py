@@ -36,6 +36,7 @@ def matLoad(u, v):
         % LFName
     )
     disp_gt = mat["depth"]
+    # print(type(disp_gt[u][v]))
     return disp_gt[u][v]
 
 
@@ -48,11 +49,12 @@ def longerResize(img, longerSideLen=640):
 
 
 u1, v1 = 0, 0
+# u2, v2 = 8, 8  # 0~8(uが→方向　vが下方向)
 u2, v2 = 8, 8  # 0~8(uが→方向　vが下方向)
 camNum1 = u1 * 9 + v1
 camNum2 = u2 * 9 + v2
-cgPath = None
-setFPAuto = False
+cgPath = True
+setFPAuto = True
 useManualFP = False
 require_midas = True
 # longerSideLen = 160
@@ -65,13 +67,13 @@ renderingPly = {
     4: "mesh1+mesh2_1",
 }
 renderingMode = 1
-# content = "additional"
+content = "additional"
 # content = "lf"
-content = "ori"
+# content = "ori"
 
 if content == "ori":
     basePath = "/home/takashi/Desktop/dataset/image"
-    LFName = "copyMachine"
+    LFName = "copyCol"
     dirPath = os.path.join(basePath, LFName)
     imgPathList = glob.glob(dirPath + "/*")
     imgName1 = os.path.splitext(os.path.basename(imgPathList[0]))[0]
@@ -81,7 +83,7 @@ if content == "ori":
 
 else:
     basePath = os.path.join("/home/takashi/Desktop/dataset/lf_dataset", content)
-    LFName = "tower"
+    LFName = "antinous"
     if content == "additional":
         imgName1 = "input_Cam{:03}".format(camNum1)
         imgName2 = "input_Cam{:03}".format(camNum2)
@@ -101,7 +103,7 @@ img1 = cv2.imread(imgPath1)
 img2 = cv2.imread(imgPath2)
 img1 = longerResize(img1, longerSideLen=longerSideLen)
 img2 = longerResize(img2, longerSideLen=longerSideLen)
-print(img1.shape)
+# print(img1.shape)
 # dispImg2, dispImg1 = None, None
 if require_midas:
     if os.path.isfile("./depth/" + imgName1 + ".npy") and os.path.isfile(
@@ -112,6 +114,9 @@ if require_midas:
 else:
     dispImg1 = matLoad(u1, v1)
     dispImg2 = matLoad(u2, v2)
+    # print(np.max(dispImg1), np.min(dispImg1))
+    max, min = np.max(dispImg1), np.min(dispImg1)
+    cv2.imwrite("antinous.png", (dispImg1 - min) / (max - min) * 255)
 
 # ここをMidasOnlyから出てきたNpyに書き換える
 # Depthとかは正直おかしいかもしれないが、そこに関してはスルー
